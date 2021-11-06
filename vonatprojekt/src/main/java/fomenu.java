@@ -27,22 +27,37 @@ public class fomenu extends javax.swing.JFrame {
     private void initComponents() {
 
         jLabel1 = new javax.swing.JLabel();
-        jButton1 = new javax.swing.JButton();
-        jButton2 = new javax.swing.JButton();
-        jButton3 = new javax.swing.JButton();
-        jButton4 = new javax.swing.JButton();
+        ticketBuy_btn = new javax.swing.JButton();
+        favorites_btn = new javax.swing.JButton();
+        userInfo_btn = new javax.swing.JButton();
+        history_btn = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
         jLabel1.setText("Név");
 
-        jButton1.setText("Jegy vásárlás");
+        ticketBuy_btn.setText("Jegy vásárlás");
+        ticketBuy_btn.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                ticketBuy_btnActionPerformed(evt);
+            }
+        });
 
-        jButton2.setText("Kedvencek");
+        favorites_btn.setText("Kedvencek");
 
-        jButton3.setText("Saját adatok");
+        userInfo_btn.setText("Saját adatok");
+        userInfo_btn.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                userInfo_btnActionPerformed(evt);
+            }
+        });
 
-        jButton4.setText("Megvásárolt jegyek");
+        history_btn.setText("Megvásárolt jegyek");
+        history_btn.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                history_btnActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -53,10 +68,10 @@ public class fomenu extends javax.swing.JFrame {
                     .addGroup(layout.createSequentialGroup()
                         .addGap(35, 35, 35)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addComponent(jButton3, javax.swing.GroupLayout.DEFAULT_SIZE, 192, Short.MAX_VALUE)
-                            .addComponent(jButton1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(jButton2, javax.swing.GroupLayout.DEFAULT_SIZE, 192, Short.MAX_VALUE)
-                            .addComponent(jButton4, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+                            .addComponent(userInfo_btn, javax.swing.GroupLayout.DEFAULT_SIZE, 192, Short.MAX_VALUE)
+                            .addComponent(ticketBuy_btn, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(favorites_btn, javax.swing.GroupLayout.DEFAULT_SIZE, 192, Short.MAX_VALUE)
+                            .addComponent(history_btn, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
                     .addGroup(layout.createSequentialGroup()
                         .addGap(121, 121, 121)
                         .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 34, javax.swing.GroupLayout.PREFERRED_SIZE)))
@@ -68,18 +83,40 @@ public class fomenu extends javax.swing.JFrame {
                 .addGap(23, 23, 23)
                 .addComponent(jLabel1)
                 .addGap(57, 57, 57)
-                .addComponent(jButton1)
+                .addComponent(ticketBuy_btn)
                 .addGap(18, 18, 18)
-                .addComponent(jButton3)
+                .addComponent(userInfo_btn)
                 .addGap(18, 18, 18)
-                .addComponent(jButton2)
+                .addComponent(favorites_btn)
                 .addGap(18, 18, 18)
-                .addComponent(jButton4)
+                .addComponent(history_btn)
                 .addContainerGap(173, Short.MAX_VALUE))
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
+
+    //A gombok megnyomására eldobja a főmenü oldalt és megnyitja a gombhoz járuló JFrame-t
+    private void ticketBuy_btnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ticketBuy_btnActionPerformed
+        // TODO add your handling code here:
+        super.dispose();
+        jegyvasarlas vasarlas = new jegyvasarlas();
+        vasarlas.setVisible(true);
+    }//GEN-LAST:event_ticketBuy_btnActionPerformed
+
+    private void history_btnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_history_btnActionPerformed
+        // TODO add your handling code here:
+        super.dispose();
+        kedvencek kedvenc = new kedvencek();
+        kedvenc.setVisible(true);
+    }//GEN-LAST:event_history_btnActionPerformed
+
+    private void userInfo_btnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_userInfo_btnActionPerformed
+        // TODO add your handling code here:
+        super.dispose();
+        SajatAdatok userInfo = new SajatAdatok();
+        userInfo.setVisible(true);
+    }//GEN-LAST:event_userInfo_btnActionPerformed
 
     /**
      * @param args the command line arguments
@@ -118,10 +155,10 @@ public class fomenu extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton jButton1;
-    private javax.swing.JButton jButton2;
-    private javax.swing.JButton jButton3;
-    private javax.swing.JButton jButton4;
+    private javax.swing.JButton favorites_btn;
+    private javax.swing.JButton history_btn;
     private javax.swing.JLabel jLabel1;
+    private javax.swing.JButton ticketBuy_btn;
+    private javax.swing.JButton userInfo_btn;
     // End of variables declaration//GEN-END:variables
 }
