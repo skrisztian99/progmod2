@@ -1,6 +1,5 @@
 
 import java.sql.PreparedStatement;
-import java.sql.ResultSet;
 import java.util.Arrays;
 import javax.swing.JOptionPane;
 
@@ -92,7 +91,7 @@ public class SajatAdatok extends javax.swing.JFrame {
 
         jLabel8.setText("Születési idő:");
 
-        szulido.setFormatterFactory(new javax.swing.text.DefaultFormatterFactory(new javax.swing.text.DateFormatter()));
+        szulido.setFormatterFactory(new javax.swing.text.DefaultFormatterFactory(new javax.swing.text.DateFormatter(new java.text.SimpleDateFormat("y. MM. dd"))));
 
         try {
             telszam.setFormatterFactory(new javax.swing.text.DefaultFormatterFactory(new javax.swing.text.MaskFormatter("###-####")));

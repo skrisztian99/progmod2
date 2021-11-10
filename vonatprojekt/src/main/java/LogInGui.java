@@ -135,7 +135,7 @@ public class LogInGui extends javax.swing.JFrame {
         // TODO add your handling code here:
         try{
             String query ="SELECT * FROM utas where email=? and jelszo=? ";
-            //Itt azért ír hibát mert nincs kapcsolódva az adatbázishoz, egy connection változó lesz készítve a csatlakozáshoz
+            //Itt azért ír hibát mert nincs kapcsolódva az adatbázishoz, egy connection function lesz készítve a csatlakozáshoz
             //Az adatbázisból a loginhoz szükséges adatok lekérése
             PreparedStatement pst = connection.prepareStatement(query);
             pst.setString(1, login_email.getText());
