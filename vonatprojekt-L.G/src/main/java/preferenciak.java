@@ -261,12 +261,9 @@ public class preferenciak extends javax.swing.JFrame {
     if(sorszam.length() == 10){
         sorszam = "";
     }
-    if(sorszam.length() > 3){
+    if(sorszam.length() > 2){
         JOptionPane.showMessageDialog(null, "Kérem válassza ki a legfontosabbat");
     }
-//    if(sorszam.charAt(0) == sorszam.charAt(2)){
-//        sorszam.replace(String.valueOf(sorszam.charAt(2)), "");
-//    }
     System.out.println(largest);
     System.out.println(sorszam);
     }//GEN-LAST:event_jButton1MouseClicked
