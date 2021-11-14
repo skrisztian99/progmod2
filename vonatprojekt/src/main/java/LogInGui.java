@@ -1,6 +1,5 @@
 
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
+import java.sql.*;
 import java.util.Arrays;
 import javax.swing.JOptionPane;
 
@@ -122,6 +121,7 @@ public class LogInGui extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
+    Connection connection = dbConnection.dbConnector();
     //A regisztráció megnyitása
     private void register_btnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_register_btnActionPerformed
         // TODO add your handling code here:
@@ -135,8 +135,6 @@ public class LogInGui extends javax.swing.JFrame {
         // TODO add your handling code here:
         try{
             String query ="SELECT * FROM utas where email=? and jelszo=? ";
-            //Itt azért ír hibát mert nincs kapcsolódva az adatbázishoz, egy connection function lesz készítve a csatlakozáshoz
-            //Az adatbázisból a loginhoz szükséges adatok lekérése
             PreparedStatement pst = connection.prepareStatement(query);
             pst.setString(1, login_email.getText());
             pst.setString(2, Arrays.toString(login_password.getPassword()));
