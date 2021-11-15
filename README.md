@@ -5,6 +5,9 @@ A program egy meglévő problémát hivatott segíteni, megoldani. A vonatprojek
 A projekten dolgozó lelkes csapat:
 
 Kovács Dániel Back-end
+
 Lászlóffy Gábor Back-end
+
 Ruppert Róbert Adatbázis
+
 Schiefer Krisztián Dávid (leader) front-end, tester
