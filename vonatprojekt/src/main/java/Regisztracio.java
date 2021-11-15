@@ -14,12 +14,12 @@ import javax.swing.JOptionPane;
  *
  * @author tiand
  */
-public class SajatAdatok extends javax.swing.JFrame {
+public class Regisztracio extends javax.swing.JFrame {
 
     /**
      * Creates new form SajatAdatok
      */
-    public SajatAdatok() {
+    public Regisztracio() {
         initComponents();
     }
 
@@ -43,7 +43,6 @@ public class SajatAdatok extends javax.swing.JFrame {
         jLabel5 = new javax.swing.JLabel();
         vezeteknev = new javax.swing.JTextField();
         jLabel6 = new javax.swing.JLabel();
-        iranyitoszam = new javax.swing.JTextField();
         jLabel7 = new javax.swing.JLabel();
         utca = new javax.swing.JTextField();
         jLabel9 = new javax.swing.JLabel();
@@ -57,6 +56,7 @@ public class SajatAdatok extends javax.swing.JFrame {
         telszam = new javax.swing.JFormattedTextField();
         jLabel12 = new javax.swing.JLabel();
         kedvezmeny = new javax.swing.JComboBox<>();
+        iranyitoszam = new javax.swing.JFormattedTextField();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -64,6 +64,12 @@ public class SajatAdatok extends javax.swing.JFrame {
         save_btn.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 save_btnActionPerformed(evt);
+            }
+        });
+
+        keresztnev.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                keresztnevKeyPressed(evt);
             }
         });
 
@@ -77,6 +83,12 @@ public class SajatAdatok extends javax.swing.JFrame {
 
         jLabel5.setText("Vezetéknév:");
 
+        vezeteknev.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                vezeteknevKeyPressed(evt);
+            }
+        });
+
         jLabel6.setText("Irányítószám:");
 
         jLabel7.setText("Város:");
@@ -85,7 +97,7 @@ public class SajatAdatok extends javax.swing.JFrame {
 
         jLabel10.setText("Házszám:");
 
-        jLabel11.setText("Saját adatok");
+        jLabel11.setText("Regisztráció");
 
         pref_checkbox.setText("Preferenciák?");
 
@@ -93,7 +105,11 @@ public class SajatAdatok extends javax.swing.JFrame {
 
         jLabel8.setText("Születési idő:");
 
-        szulido.setFormatterFactory(new javax.swing.text.DefaultFormatterFactory(new javax.swing.text.DateFormatter(new java.text.SimpleDateFormat("y. MM. dd"))));
+        try {
+            szulido.setFormatterFactory(new javax.swing.text.DefaultFormatterFactory(new javax.swing.text.MaskFormatter("####-##-##")));
+        } catch (java.text.ParseException ex) {
+            ex.printStackTrace();
+        }
 
         try {
             telszam.setFormatterFactory(new javax.swing.text.DefaultFormatterFactory(new javax.swing.text.MaskFormatter("##-## ### ####")));
@@ -109,6 +125,12 @@ public class SajatAdatok extends javax.swing.JFrame {
                 kedvezmenyActionPerformed(evt);
             }
         });
+
+        try {
+            iranyitoszam.setFormatterFactory(new javax.swing.text.DefaultFormatterFactory(new javax.swing.text.MaskFormatter("####")));
+        } catch (java.text.ParseException ex) {
+            ex.printStackTrace();
+        }
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -128,11 +150,11 @@ public class SajatAdatok extends javax.swing.JFrame {
                                     .addComponent(jLabel7, javax.swing.GroupLayout.PREFERRED_SIZE, 71, javax.swing.GroupLayout.PREFERRED_SIZE)
                                     .addComponent(jLabel6, javax.swing.GroupLayout.PREFERRED_SIZE, 71, javax.swing.GroupLayout.PREFERRED_SIZE))
                                 .addGap(65, 65, 65)
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(utca, javax.swing.GroupLayout.PREFERRED_SIZE, 69, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                                     .addComponent(hazszam, javax.swing.GroupLayout.PREFERRED_SIZE, 69, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(iranyitoszam, javax.swing.GroupLayout.PREFERRED_SIZE, 69, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(varos, javax.swing.GroupLayout.PREFERRED_SIZE, 110, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                    .addComponent(varos, javax.swing.GroupLayout.PREFERRED_SIZE, 110, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(iranyitoszam)
+                                    .addComponent(utca))
                                 .addContainerGap()))
                         .addComponent(jLabel10, javax.swing.GroupLayout.PREFERRED_SIZE, 71, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
@@ -195,8 +217,8 @@ public class SajatAdatok extends javax.swing.JFrame {
                     .addComponent(telszam, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(16, 16, 16)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(iranyitoszam, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel6, javax.swing.GroupLayout.PREFERRED_SIZE, 14, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(jLabel6, javax.swing.GroupLayout.PREFERRED_SIZE, 14, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(iranyitoszam, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jLabel7, javax.swing.GroupLayout.PREFERRED_SIZE, 14, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -252,7 +274,7 @@ public class SajatAdatok extends javax.swing.JFrame {
             pst.setString(7, (String)varos.getSelectedItem());
             pst.setString(8, utca.getText());
             pst.setString(9, hazszam.getText());
-            pst.setString(10, Arrays.toString(jelszo.getPassword()));
+            pst.setString(10, String.valueOf(jelszo.getPassword()));
             
             
             pst.execute();
@@ -277,6 +299,30 @@ public class SajatAdatok extends javax.swing.JFrame {
     private void kedvezmenyActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_kedvezmenyActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_kedvezmenyActionPerformed
+
+    private void vezeteknevKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_vezeteknevKeyPressed
+        // TODO add your handling code here:
+        char c = evt.getKeyChar();
+        
+        if(Character.isLetter(c) || Character.isWhitespace(c) || Character.isISOControl(c)){
+            vezeteknev.setEditable(true);
+        }
+        else {
+            vezeteknev.setEditable(false);
+        }
+    }//GEN-LAST:event_vezeteknevKeyPressed
+
+    private void keresztnevKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_keresztnevKeyPressed
+        // TODO add your handling code here:
+        char c = evt.getKeyChar();
+        
+        if(Character.isLetter(c) || Character.isWhitespace(c) || Character.isISOControl(c)){
+            keresztnev.setEditable(true);
+        }
+        else {
+            keresztnev.setEditable(false);
+        }
+    }//GEN-LAST:event_keresztnevKeyPressed
 
     /**
      * @param args the command line arguments
@@ -316,7 +362,7 @@ public class SajatAdatok extends javax.swing.JFrame {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JTextField email;
     private javax.swing.JTextField hazszam;
-    private javax.swing.JTextField iranyitoszam;
+    private javax.swing.JFormattedTextField iranyitoszam;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel11;

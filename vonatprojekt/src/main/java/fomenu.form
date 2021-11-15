@@ -36,7 +36,7 @@
                   </Group>
                   <Group type="102" alignment="0" attributes="0">
                       <EmptySpace min="-2" pref="121" max="-2" attributes="0"/>
-                      <Component id="jLabel1" min="-2" pref="34" max="-2" attributes="0"/>
+                      <Component id="lbl_nev" min="-2" pref="34" max="-2" attributes="0"/>
                   </Group>
               </Group>
               <EmptySpace pref="59" max="32767" attributes="0"/>
@@ -47,7 +47,7 @@
       <Group type="103" groupAlignment="0" attributes="0">
           <Group type="102" alignment="0" attributes="0">
               <EmptySpace min="-2" pref="23" max="-2" attributes="0"/>
-              <Component id="jLabel1" min="-2" max="-2" attributes="0"/>
+              <Component id="lbl_nev" min="-2" max="-2" attributes="0"/>
               <EmptySpace min="-2" pref="57" max="-2" attributes="0"/>
               <Component id="ticketBuy_btn" min="-2" max="-2" attributes="0"/>
               <EmptySpace type="separate" max="-2" attributes="0"/>
@@ -62,7 +62,7 @@
     </DimensionLayout>
   </Layout>
   <SubComponents>
-    <Component class="javax.swing.JLabel" name="jLabel1">
+    <Component class="javax.swing.JLabel" name="lbl_nev">
       <Properties>
         <Property name="text" type="java.lang.String" value="N&#xe9;v"/>
       </Properties>

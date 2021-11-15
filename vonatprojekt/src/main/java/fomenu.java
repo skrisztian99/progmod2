@@ -26,7 +26,7 @@ public class fomenu extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        jLabel1 = new javax.swing.JLabel();
+        lbl_nev = new javax.swing.JLabel();
         ticketBuy_btn = new javax.swing.JButton();
         favorites_btn = new javax.swing.JButton();
         userInfo_btn = new javax.swing.JButton();
@@ -34,7 +34,7 @@ public class fomenu extends javax.swing.JFrame {
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
-        jLabel1.setText("Név");
+        lbl_nev.setText("Név");
 
         ticketBuy_btn.setText("Jegy vásárlás");
         ticketBuy_btn.addActionListener(new java.awt.event.ActionListener() {
@@ -74,14 +74,14 @@ public class fomenu extends javax.swing.JFrame {
                             .addComponent(history_btn, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
                     .addGroup(layout.createSequentialGroup()
                         .addGap(121, 121, 121)
-                        .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 34, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addComponent(lbl_nev, javax.swing.GroupLayout.PREFERRED_SIZE, 34, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addContainerGap(59, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addGap(23, 23, 23)
-                .addComponent(jLabel1)
+                .addComponent(lbl_nev)
                 .addGap(57, 57, 57)
                 .addComponent(ticketBuy_btn)
                 .addGap(18, 18, 18)
@@ -96,6 +96,9 @@ public class fomenu extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
+    public void setFieldText(String text) {
+        lbl_nev.setText(text);
+    }
     //A gombok megnyomására eldobja a főmenü oldalt és megnyitja a gombhoz járuló JFrame-t
     private void ticketBuy_btnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ticketBuy_btnActionPerformed
         // TODO add your handling code here:
@@ -104,6 +107,7 @@ public class fomenu extends javax.swing.JFrame {
         vasarlas.setVisible(true);
     }//GEN-LAST:event_ticketBuy_btnActionPerformed
 
+    
     private void history_btnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_history_btnActionPerformed
         // TODO add your handling code here:
         super.dispose();
@@ -157,7 +161,7 @@ public class fomenu extends javax.swing.JFrame {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton favorites_btn;
     private javax.swing.JButton history_btn;
-    private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel lbl_nev;
     private javax.swing.JButton ticketBuy_btn;
     private javax.swing.JButton userInfo_btn;
     // End of variables declaration//GEN-END:variables

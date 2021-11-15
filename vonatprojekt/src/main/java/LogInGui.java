@@ -126,8 +126,8 @@ public class LogInGui extends javax.swing.JFrame {
     private void register_btnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_register_btnActionPerformed
         // TODO add your handling code here:
         super.dispose();
-        SajatAdatok userInfo = new SajatAdatok();
-        userInfo.setVisible(true);
+        Regisztracio reg = new Regisztracio();
+        reg.setVisible(true);
     }//GEN-LAST:event_register_btnActionPerformed
         
     //Amint a csatlakozás módszere megvan, implementálom a logint,most az ötletet írom meg.
@@ -137,12 +137,16 @@ public class LogInGui extends javax.swing.JFrame {
             String query ="SELECT * FROM utas where email=? and jelszo=? ";
             PreparedStatement pst = connection.prepareStatement(query);
             pst.setString(1, login_email.getText());
-            pst.setString(2, Arrays.toString(login_password.getPassword()));
+            pst.setString(2, String.valueOf(login_password.getPassword()));
             
+            String kiadnev = "";
             ResultSet rs = pst.executeQuery();
             int count = 0;
             while(rs.next()){
                 count++;
+                String vezeteknev = rs.getString("vezeteknev");
+                String keresztnev = rs.getString("keresztnev");
+                kiadnev = vezeteknev + " " + keresztnev;
                 
             }
             //Ha a count 1 (az email és jelszó helyes), akkor megjeleníti a főmenüt.
@@ -154,6 +158,8 @@ public class LogInGui extends javax.swing.JFrame {
             else {
                 JOptionPane.showMessageDialog(null, "Az email cím vagy a jelszó hibás!");
             }
+            fomenu fomenu = new fomenu();
+            fomenu.setFieldText(kiadnev);
             rs.close();
             pst.close();
         }
