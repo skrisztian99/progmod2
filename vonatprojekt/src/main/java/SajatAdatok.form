@@ -82,10 +82,10 @@
                   <Group type="102" alignment="0" attributes="0">
                       <Group type="103" groupAlignment="0" attributes="0">
                           <Component id="jLabel3" alignment="0" min="-2" pref="89" max="-2" attributes="0"/>
-                          <Component id="pref_checkbox" min="-2" pref="105" max="-2" attributes="0"/>
                           <Component id="jLabel8" alignment="0" min="-2" max="-2" attributes="0"/>
                           <Component id="jLabel4" alignment="0" min="-2" pref="66" max="-2" attributes="0"/>
                       </Group>
+                      <EmptySpace min="-2" pref="16" max="-2" attributes="0"/>
                       <Group type="103" groupAlignment="0" attributes="0">
                           <Group type="102" alignment="0" attributes="0">
                               <EmptySpace min="-2" pref="31" max="-2" attributes="0"/>
@@ -171,10 +171,7 @@
                   <Component id="jelszo" alignment="3" min="-2" max="-2" attributes="0"/>
               </Group>
               <EmptySpace min="-2" pref="36" max="-2" attributes="0"/>
-              <Group type="103" groupAlignment="3" attributes="0">
-                  <Component id="save_btn" alignment="3" min="-2" max="-2" attributes="0"/>
-                  <Component id="pref_checkbox" alignment="3" min="-2" max="-2" attributes="0"/>
-              </Group>
+              <Component id="save_btn" min="-2" max="-2" attributes="0"/>
               <EmptySpace min="-2" pref="78" max="-2" attributes="0"/>
           </Group>
       </Group>
@@ -251,11 +248,6 @@
     <Component class="javax.swing.JLabel" name="jLabel11">
       <Properties>
         <Property name="text" type="java.lang.String" value="Saj&#xe1;t adatok"/>
-      </Properties>
-    </Component>
-    <Component class="javax.swing.JCheckBox" name="pref_checkbox">
-      <Properties>
-        <Property name="text" type="java.lang.String" value="Preferenci&#xe1;k?"/>
       </Properties>
     </Component>
     <Component class="javax.swing.JComboBox" name="varos">

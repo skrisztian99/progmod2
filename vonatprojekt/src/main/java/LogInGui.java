@@ -147,7 +147,6 @@ public class LogInGui extends javax.swing.JFrame {
                 String vezeteknev = rs.getString("vezeteknev");
                 String keresztnev = rs.getString("keresztnev");
                 kiadnev = vezeteknev + " " + keresztnev;
-                
             }
             //Ha a count 1 (az email és jelszó helyes), akkor megjeleníti a főmenüt.
             if(count == 1){

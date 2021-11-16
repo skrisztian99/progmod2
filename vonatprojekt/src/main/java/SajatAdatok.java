@@ -50,7 +50,6 @@ public class SajatAdatok extends javax.swing.JFrame {
         hazszam = new javax.swing.JTextField();
         jLabel10 = new javax.swing.JLabel();
         jLabel11 = new javax.swing.JLabel();
-        pref_checkbox = new javax.swing.JCheckBox();
         varos = new javax.swing.JComboBox<>();
         jLabel8 = new javax.swing.JLabel();
         szulido = new javax.swing.JFormattedTextField();
@@ -86,8 +85,6 @@ public class SajatAdatok extends javax.swing.JFrame {
         jLabel10.setText("Házszám:");
 
         jLabel11.setText("Saját adatok");
-
-        pref_checkbox.setText("Preferenciák?");
 
         varos.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Budapest", "Debrecen", "Szeged", "Miskolc", "Pécs", "Győr", "Nyíregyháza", "Kecskemét", "Székesfehérvár", "Szombathely", "Érd", "Szolnok", "Tatabánya", "Sopron", "Kaposvár", "Veszprém", "Békéscsaba", "Zalaegerszeg", "Eger", "Nagykanizsa", "Dunakeszi", "Hódmezővásárhely", "Dunaújváros", "Szigetszentmiklós", "Cegléd" }));
 
@@ -158,9 +155,9 @@ public class SajatAdatok extends javax.swing.JFrame {
                     .addGroup(layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 89, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(pref_checkbox, javax.swing.GroupLayout.PREFERRED_SIZE, 105, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(jLabel8)
                             .addComponent(jLabel4, javax.swing.GroupLayout.PREFERRED_SIZE, 66, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(16, 16, 16)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(layout.createSequentialGroup()
                                 .addGap(31, 31, 31)
@@ -226,9 +223,7 @@ public class SajatAdatok extends javax.swing.JFrame {
                     .addComponent(jLabel4, javax.swing.GroupLayout.PREFERRED_SIZE, 14, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jelszo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(36, 36, 36)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(save_btn)
-                    .addComponent(pref_checkbox))
+                .addComponent(save_btn)
                 .addGap(78, 78, 78))
         );
 
@@ -259,11 +254,7 @@ public class SajatAdatok extends javax.swing.JFrame {
             JOptionPane.showMessageDialog(null, "Adatok sikeresen elmentve!");
             pst.close();
             
-            if(pref_checkbox.isSelected()) {
-                super.dispose();
-                preferenciak prefs = new preferenciak();
-                prefs.setVisible(true);
-            }
+            
             
             super.dispose();
             fomenu fomenu = new fomenu();
@@ -332,7 +323,6 @@ public class SajatAdatok extends javax.swing.JFrame {
     private javax.swing.JPasswordField jelszo;
     private javax.swing.JComboBox<String> kedvezmeny;
     private javax.swing.JTextField keresztnev;
-    private javax.swing.JCheckBox pref_checkbox;
     private javax.swing.JButton save_btn;
     private javax.swing.JFormattedTextField szulido;
     private javax.swing.JFormattedTextField telszam;
