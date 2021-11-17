@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package controller;
 
 import java.io.IOException;
@@ -18,10 +13,6 @@ import model.Utas;
 import org.json.JSONObject;
 import service.UtasService;
 
-/**
- *
- * @author Robi
- */
 public class UtasController extends HttpServlet {
 
     /**
@@ -65,9 +56,13 @@ public class UtasController extends HttpServlet {
                         if(!request.getParameter("kedvezmeny").equals("Nincs kedvezmény")){
                             //u.setKEDVEZMENYidKedvezmeny(kEDVEZMENYidKedvezmeny);
                         }
+                        //SUGGESTION: Kedvezmény id kérése a view-tól
                         u.setEmail(request.getParameter("email"));
                         if(request.getParameter("password_1").equals(request.getParameter("password_2"))){
                             u.setJelszo(request.getParameter("password_1"));
+                        }
+                        else{
+                            //Megyezik meg a két jelszó
                         }
                         String msg = "Hiba";
                         if(uService.create(u)){
@@ -78,6 +73,12 @@ public class UtasController extends HttpServlet {
                         obj.put("valasz", msg);
                         _package.write(obj.toString());
                     }
+                }
+                
+                if(request.getParameter("task").equals("editUtas")){
+                    //Jelenlegi utas szerkesztése
+                    Integer id = 0; //Bejelentkezett utas azonosítója
+                    Utas u = uService.findUtas(id);
                 }
             }
         }

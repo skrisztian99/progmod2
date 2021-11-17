@@ -75,4 +75,93 @@ public class UtasService {
             }
         }
     }
+    
+    public Utas findUtas(Integer id) {
+        EntityManager em = getEntityManager();
+        try {
+            return em.find(Utas.class, id);
+        } finally {
+            em.close();
+        }
+    }
+    
+    public Utas findUtasByEmail(String email){
+        EntityManager em = getEntityManager();
+        try{
+            return em.find(Utas.class, email);
+        }finally{
+            em.close();
+        }
+    }
+    
+    public Boolean edit(Utas utas) throws Exception {
+        EntityManager em = null;
+        try {
+            em = getEntityManager();
+            em.getTransaction().begin();
+            Utas persistentUtas = em.find(Utas.class, utas.getIdUtas());
+            Kedvezmeny kedvezmenyidKedvezmenyOld = persistentUtas.getKEDVEZMENYidKedvezmeny();
+            Kedvezmeny kedvezmenyidKedvezmenyNew = utas.getKEDVEZMENYidKedvezmeny();
+            List<Jegy> jegyListOld = persistentUtas.getJegyList();
+            List<Jegy> jegyListNew = utas.getJegyList();
+            List<String> illegalOrphanMessages = null;
+            for (Jegy jegyListOldJegy : jegyListOld) {
+                if (!jegyListNew.contains(jegyListOldJegy)) {
+                    if (illegalOrphanMessages == null) {
+                        illegalOrphanMessages = new ArrayList<String>();
+                    }
+                    illegalOrphanMessages.add("You must retain Jegy " + jegyListOldJegy + " since its idUtas field is not nullable.");
+                }
+            }
+            if (illegalOrphanMessages != null) {
+                throw new Exception((Throwable) illegalOrphanMessages);
+            }
+            if (kedvezmenyidKedvezmenyNew != null) {
+                kedvezmenyidKedvezmenyNew = em.getReference(kedvezmenyidKedvezmenyNew.getClass(), kedvezmenyidKedvezmenyNew.getIdKedvezmeny());
+                utas.setKEDVEZMENYidKedvezmeny(kedvezmenyidKedvezmenyNew);
+            }
+            List<Jegy> attachedJegyListNew = new ArrayList<Jegy>();
+            for (Jegy jegyListNewJegyToAttach : jegyListNew) {
+                jegyListNewJegyToAttach = em.getReference(jegyListNewJegyToAttach.getClass(), jegyListNewJegyToAttach.getIdJEGY());
+                attachedJegyListNew.add(jegyListNewJegyToAttach);
+            }
+            jegyListNew = attachedJegyListNew;
+            utas.setJegyList(jegyListNew);
+            utas = em.merge(utas);
+            if (kedvezmenyidKedvezmenyOld != null && !kedvezmenyidKedvezmenyOld.equals(kedvezmenyidKedvezmenyNew)) {
+                kedvezmenyidKedvezmenyOld.getUtasList().remove(utas);
+                kedvezmenyidKedvezmenyOld = em.merge(kedvezmenyidKedvezmenyOld);
+            }
+            if (kedvezmenyidKedvezmenyNew != null && !kedvezmenyidKedvezmenyNew.equals(kedvezmenyidKedvezmenyOld)) {
+                kedvezmenyidKedvezmenyNew.getUtasList().add(utas);
+                kedvezmenyidKedvezmenyNew = em.merge(kedvezmenyidKedvezmenyNew);
+            }
+            for (Jegy jegyListNewJegy : jegyListNew) {
+                if (!jegyListOld.contains(jegyListNewJegy)) {
+                    Utas oldIdUtasOfJegyListNewJegy = jegyListNewJegy.getIdUtas();
+                    jegyListNewJegy.setIdUtas(utas);
+                    jegyListNewJegy = em.merge(jegyListNewJegy);
+                    if (oldIdUtasOfJegyListNewJegy != null && !oldIdUtasOfJegyListNewJegy.equals(utas)) {
+                        oldIdUtasOfJegyListNewJegy.getJegyList().remove(jegyListNewJegy);
+                        oldIdUtasOfJegyListNewJegy = em.merge(oldIdUtasOfJegyListNewJegy);
+                    }
+                }
+            }
+            em.getTransaction().commit();
+            return Boolean.TRUE;
+        } catch (Exception ex) {
+            String msg = ex.getLocalizedMessage();
+            if (msg == null || msg.length() == 0) {
+                Integer id = utas.getIdUtas();
+                if (findUtas(id) == null) {
+                    System.out.println("The utas with id " + id + " no longer exists.");
+                }
+            }
+            return Boolean.FALSE;
+        } finally {
+            if (em != null) {
+                em.close();
+            }
+        }
+    }
 }
