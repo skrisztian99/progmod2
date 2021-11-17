@@ -80,6 +80,8 @@ public class UtasController extends HttpServlet {
                     Integer id = 0; //Bejelentkezett utas azonosítója
                     Utas u = uService.findUtas(id);
                 }
+                
+                
             }
         }
         catch(Exception ex){
@@ -113,7 +115,12 @@ public class UtasController extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        processRequest(request, response);
+        response.getContentType("text/html");
+        PrintWriter out = response.getWriter();
+        
+        String email = request.getParameter("email");
+        String password = request.getParameter("password");
+        //Még van itt tennivaló
     }
 
     /**
