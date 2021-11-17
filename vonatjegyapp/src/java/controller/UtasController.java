@@ -7,10 +7,15 @@ package controller;
 
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.sql.Date;
+import javax.persistence.EntityManagerFactory;
+import javax.persistence.Persistence;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import model.Utas;
+import org.json.JSONObject;
 import service.UtasService;
 
 /**
@@ -31,9 +36,50 @@ public class UtasController extends HttpServlet {
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         response.setContentType("application/json");
-        UtasService uService = new UtasService();
+        EntityManagerFactory emf = Persistence.createEntityManagerFactory("vonatjegyappPU");
+        UtasService uService = new UtasService(emf);
         try {
-            
+            if(request.getParameter("task") != null){
+                if(request.getParameter("task").equals("createUtas")){
+                    if(request.getParameter("vezeteknev") != null &&
+                    request.getParameter("keresztnev") != null &&
+                    request.getParameter("telefon") != null &&
+                    request.getParameter("irsz") != null && 
+                    request.getParameter("varos") != null &&
+                    request.getParameter("utca") != null && 
+                    request.getParameter("hazszam") != null &&
+                    request.getParameter("szulido") != null &&
+                    request.getParameter("kedvezmeny") != null &&
+                    request.getParameter("email") != null && 
+                    request.getParameter("password_1") != null && 
+                    request.getParameter("password_2") != null){
+                        Utas u = new Utas();
+                        u.setVezeteknev(request.getParameter("vezeteknev"));
+                        u.setKersztnev(request.getParameter("keresztnev"));
+                        u.setTelefon(request.getParameter("telefon"));
+                        u.setIranyitoszam(request.getParameter("irsz"));
+                        u.setVaros(request.getParameter("varos"));
+                        u.setUtca(request.getParameter("utca"));
+                        u.setHazszam(request.getParameter("hazszam"));
+                        u.setSzulido(Date.valueOf(request.getParameter("szulido")));
+                        if(!request.getParameter("kedvezmeny").equals("Nincs kedvezmény")){
+                            //u.setKEDVEZMENYidKedvezmeny(kEDVEZMENYidKedvezmeny);
+                        }
+                        u.setEmail(request.getParameter("email"));
+                        if(request.getParameter("password_1").equals(request.getParameter("password_2"))){
+                            u.setJelszo(request.getParameter("password_1"));
+                        }
+                        String msg = "Hiba";
+                        if(uService.create(u)){
+                            msg = "Siker";
+                        }
+                        PrintWriter _package = response.getWriter();
+                        JSONObject obj = new JSONObject();
+                        obj.put("valasz", msg);
+                        _package.write(obj.toString());
+                    }
+                }
+            }
         }
         catch(Exception ex){
             

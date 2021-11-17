@@ -4,25 +4,22 @@ import java.util.ArrayList;
 import java.util.List;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
-import javax.transaction.UserTransaction;
 import model.Jegy;
 import model.Kedvezmeny;
 import model.Preferencia;
 import model.Utas;
 
 public class UtasService {
-    public UtasService(UserTransaction utx, EntityManagerFactory emf) {
-        this.utx = utx;
+    public UtasService(EntityManagerFactory emf) {
         this.emf = emf;
     }
-    private UserTransaction utx = null;
     private EntityManagerFactory emf = null;
 
     public EntityManager getEntityManager() {
         return emf.createEntityManager();
     }
 
-    public void create(Utas utas) throws Exception {
+    public Boolean create(Utas utas) throws Exception {
         if (utas.getPreferenciaList() == null) {
             utas.setPreferenciaList(new ArrayList<Preferencia>());
         }
@@ -31,8 +28,8 @@ public class UtasService {
         }
         EntityManager em = null;
         try {
-            utx.begin();
             em = getEntityManager();
+            em.getTransaction().begin();
             Kedvezmeny KEDVEZMENYidKedvezmeny = utas.getKEDVEZMENYidKedvezmeny();
             if (KEDVEZMENYidKedvezmeny != null) {
                 KEDVEZMENYidKedvezmeny = em.getReference(KEDVEZMENYidKedvezmeny.getClass(), KEDVEZMENYidKedvezmeny.getIdKedvezmeny());
@@ -68,9 +65,10 @@ public class UtasService {
                     oldIdUtasOfJegyListJegy = em.merge(oldIdUtasOfJegyListJegy);
                 }
             }
-            utx.commit();
+            em.getTransaction().commit();
+            return Boolean.TRUE;
         } catch (Exception ex) {
-            
+            return Boolean.FALSE;
         } finally {
             if (em != null) {
                 em.close();
