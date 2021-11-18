@@ -85,7 +85,7 @@ public class UtasService {
         }
     }
     
-    public Utas findUtasByEmail(String email){ //Nem biztos, hogy működik
+    public Utas findUtasByEmail(String email){
         EntityManager em = getEntityManager();
         try{
             return em.find(Utas.class, email);
