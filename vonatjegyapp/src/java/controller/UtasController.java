@@ -62,7 +62,7 @@ public class UtasController extends HttpServlet {
                             u.setJelszo(request.getParameter("password_1"));
                         }
                         else{
-                            //Megyezik meg a két jelszó
+                            //Nem egyezik meg a két jelszó
                         }
                         String msg = "Hiba";
                         if(uService.create(u)){
@@ -81,6 +81,24 @@ public class UtasController extends HttpServlet {
                     Utas u = uService.findUtas(id);
                 }
                 
+                if(request.getParameter("task").equals("loginUtas")){
+                   if(request.getParameter("loginemail") != null && request.getParameter("loginpassword") != null){
+                       String email = request.getParameter("loginemail");
+                       String jelszo = request.getParameter("loginpassword");
+                       try{
+                           Utas u = uService.findUtasByEmail(email);
+                           if(u.getJelszo().equals(jelszo)){
+                               //Bejelentkezve
+                           }
+                           else{
+                               //Hiba
+                           }
+                       }catch(Exception ex){
+                           //Nem található az email
+                       }
+                       
+                   }
+                }
                 
             }
         }
@@ -115,12 +133,6 @@ public class UtasController extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        response.getContentType("text/html");
-        PrintWriter out = response.getWriter();
-        
-        String email = request.getParameter("email");
-        String password = request.getParameter("password");
-        //Még van itt tennivaló
     }
 
     /**
