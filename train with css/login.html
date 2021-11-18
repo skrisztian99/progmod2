@@ -1,0 +1,62 @@
+<?php
+
+    ob_start();
+    session_start();
+
+?>
+
+<html>
+<head>
+    <img class="logo" src="progmod.jpg" alt="Logó">
+    <img class="vonatgif" src="login.gif" alt="Vonat gif">
+   
+    <title>Terminus - Élvezze a szolgáltatásaink!</title>
+    <link rel="stylesheet" href="css/bootstrap.min.css">
+    <link rel="stylesheet" href="login.css">
+
+
+</head>
+
+<body>
+    <h2>Élvezze utazását, jelentkezzen be!</h2>
+    <div class="container form-signin">
+    <?php 
+        $msg = '';
+
+        if(isset($_POST['login']) && !empty($_POST['email']) && !empty($_POST['password']))
+         {
+            if($_POST['email'] == 'kamu email' && $_POST['password'] == '1234') {
+                $_SESSION['valid'] = true;
+                $_SESSION['username'] =  'kamu username';
+            }
+            else {
+                $msg = 'Az email cím és/vagy a jelszó hibás!';
+            }
+        }
+    ?>
+    </div>
+
+    
+        <form class="form-signin" role="form" action="<?php echo htmlspecialchars($_SERVER['PHP_SELF']); ?>" method="post">
+            <div class="form-group row"> 
+                <div class="col-xs-2">
+            <h4 class="form-signin-heading"><?php echo $msg ?></h4>
+            <input type="text" id="ex1" class="form-control" name="email" placeholder="Az ön email címe" required autofocus>
+            <input type="password" id="ex1" class="form-control" name="password" placeholder="Az ön jelszava" required>
+        </div>
+            <button class="btn btn-lg btn primary btn-block" type="submit" name="login">Bejelentkezés</button>
+            <p>Még nem regisztrált? 
+                <a href="register.php">Kattintson ide!</a>
+            </p>
+        </div>
+        </form>
+    
+
+
+</body>
+
+<footer>
+
+</footer>
+
+</html>
