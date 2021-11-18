@@ -81,7 +81,6 @@ public class UtasController extends HttpServlet {
                     Utas u = uService.findUtas(id);
                 }
                 
-                
             }
         }
         catch(Exception ex){

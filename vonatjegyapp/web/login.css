@@ -1,0 +1,63 @@
+.vonatgif
+{
+  width: 77.832%;
+  height: 35%;
+}
+a{
+    text-decoration: none;
+    color: #233E5B;
+
+  
+  }
+    
+   body{
+       color: #ffa31a;
+  background-image: url(arrow.jpg);
+  background-repeat: no-repeat;
+  background-position-x: right;
+  background-position-y: 308px;
+   }
+  
+      head,body{
+          background-color:   #1A1925;
+        
+  
+          
+      }
+      
+      
+  .logo{
+      opacity: 1;
+      width: 298px;
+      height: 243px;
+  margin-top: 0px;
+    
+      
+    
+  }
+ 
+  
+  ul {
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+    background-color: #ffa31a;
+    position: absolute;
+    width: 50%;
+    justify-content: space-evenly;
+    display: flex;
+  }
+
+  .btn{
+      color: #ffa31a;
+  }
+  
+  .form-control{
+      color: #233E5B;
+      background-color: #1A1925;
+      size: 50%;
+  }
+
+ 
+  
+  
