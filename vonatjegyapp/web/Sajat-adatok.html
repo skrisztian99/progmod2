@@ -1,0 +1,178 @@
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Terminus - Könnyen, gyorsan</title>
+    <link rel="stylesheet" href="css/bootstrap.min.css">
+    <h2>Regisztráljon, és kezdje meg az utazását már MA!</h2>
+    <link rel="stylesheet" href="main.css">
+    <!-- jQuery library -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <!-- Latest compiled JavaScript -->
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script> 
+
+    <script>
+        function loginUtas(){
+            var vnev = document.getElementById("email").value;
+            var knve = document.getElementById("password").value;
+            
+            var requestToSend = {"task": "loginUtas", "email": uemail, "password": passid};
+            
+            $.ajax({
+                url: "/vonatjegyapp/UtasController",
+                type: "POST",
+                data: requestToSend,
+                success: function(response){
+                    alert("A bejelentkezés "+ response.valasz +" volt.");
+                    window.location.replace("vonatmain.html");
+                },
+        
+                error: function(){
+                    alert("Hiba történt! az adatok feltöltése közben!");
+                }
+            });
+        }
+    </script>
+ 
+</head>
+
+<body>
+
+    <div class="container">
+        <form method="post" action="register.php">   
+        <form action="/action_page.php">
+                            <label for="vnev">Vezetéknév:</label><br>
+                            <input type="text" class="vnev" name="vnev" placeholder="Jean">
+                        <br>
+
+                             <label for="knev">Keresztnév:</label>
+                        <br>
+                             <input type="text" class="knev" name="knev"placeholder="Elsa" >
+                        <br>
+
+                   
+                             <label for="Telefonszam">Telefonszám:</label>
+                        <br>
+                             <input type="tel" class="Telefonszam" name="Telefonszam" placeholder="+36303133333" pattern="[0-9]{3}-[0-9]{2}-[0-9]{3}" required> 
+                        <br>
+                       
+
+                            <label for="Iranyitoszam">Irányítószám:</label>
+                        <br>
+                            <input type="tel" class="Iranyitoszam" name="Iranyitoszam" placeholder="7624">
+                        <br>
+
+                            <label for="Lakhely">Lakhely:</label>
+                        <br>
+                            <input type="text" class="Lakhely" name="Lakhely" placeholder="Pécs">
+                        <br><br>
+
+        <form action="/action_page.php">
+                            <label for="Cim">Közterület jellege:</label>
+                            <input type="text" name="Cim" class="Cim">
+                            <br>
+        </form>
+
+                            <label for="Hazszam">Házszám:</label>
+                        <br>
+                            <input type="text" class="Hazszam" name="Hazszam" placeholder="69">
+                        <br>
+
+                         <label for="Szulido">Születési idő:</label>
+                        <br>
+                            <input type="date" class="Szulido" name="Szulido">
+                        <br>
+
+        <form action="/action_page.php">
+                        <br>
+                            <label for="Kedvezmeny">Kedvezmény:</label>
+                            <select name="Kedvezmeny" class="Kedvezmeny">
+                              <option value="Kedvezmeny">Diák</option>
+                            </select>
+                        <br>
+
+                        
+        </form>
+        
+        <label for="Email">E-mail cím:</label>
+        <br>
+             <input type="email" class="Email" name="Email" placeholder="hotmale@hotmail.com"> 
+        <br>
+
+        <label for="pwd">Jelszó megadása:</label><br>
+        <input type="password" id="pwd" name="pwd" placeholder="Valami ütőset!">
+        <br>
+        <label for="pwd">Jelszó ismételt megadása:</label><br>
+        <input type="password" id="pwd" name="pwd" placeholder="Jegyezz meg!">
+        <br><br>
+        
+       <a href="Preferenciak.html"><button class="ToPrefBtn">Katt ide!</button></a>
+
+        
+
+
+
+
+
+
+
+
+
+                    
+                    
+
+            
+      
+    </div>
+</body>
+
+<footer>
+<style>
+
+     
+ 
+    body{
+        color: #ec8f22;
+    }
+    label, input{
+        border-radius: 15px;
+     
+    }
+    input{
+        background-color: #a7a7a7;
+     
+    }
+    .kedvezmeny, .kozjelleg{
+        border-radius: 12px;
+        background-color: #a7a7a7;
+    }
+
+    .Bevitel{
+        margin: 15px;
+        margin-left: 250px;
+        background-color: #EC8F22;
+
+    }
+    .ToPrefBtn {
+  border: none;
+  color: #1A1925;
+  padding: 12px 24px;
+  border-radius: 8px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 16px;
+  margin: 4px 2px;
+  background-color:#EC8F22;
+
+
+}
+
+
+
+
+
+    
+</style>
+</footer>
+
+</html>

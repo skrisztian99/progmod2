@@ -1,0 +1,150 @@
+<html>
+<head>
+    <title>Terminus - Könnyen, gyorsan</title>
+    <link rel="stylesheet" href="css/bootstrap.min.css">
+    <h2>Most megnézzük, hogy mik is a preferenciáid</h2>
+    <link rel="stylesheet" href="main.css">
+ 
+</head>
+
+<body>
+
+    <div class="container">
+        <i> <p>Egy 0-3-ig terjedő skálán válassza ki, hogy mennyire fontos az Ön számára? </p></i>
+        <i> <p>0, egyáltalán nem fontos</p></i>
+        <i> <p>1, inkább fontos</p></i>
+        <i> <p>2, fontos</p></i>
+        <i>  <p>3, elengedhetetlen</p></i>
+       <p>Mennyire fontos Önnek a(z), hogy</p>
+
+<label for="Ablakmellett">Ablak mellett ülhessen?</label><br>
+<select name="Ablakmellett" class="Ablakmellett">
+<option value="Ablakmellett0">0</option>
+<option value="Ablakmellett1">1</option>
+<option value="Ablakmellett2">2</option>
+<option value="Ablakmellett3">3</option>
+</select>
+<br>
+
+
+<label>Ajtó mellett ülhessen?</label><br>
+<select name="Ajtomellett">
+<option value="Ajtomellett0">0</option>
+<option value="Ajtomellett1">1</option>
+<option value="Ajtomellett2">2</option>
+<option value="Ajtomellett3">3</option>
+</select>
+<br>
+
+
+<label>Menetiránnyal ellentétesen legyen a helye?</label><br>
+<select name="Menetellen" class="Menetellen">
+<option value="Menetellen0">0</option>
+<option value="Menetellen1">1</option>
+<option value="Menetellen2">2</option>
+<option value="Menetellen3">3</option>
+</select>
+<br>
+
+
+<label>Legyen asztal a helyén?</label><br>
+<select name="Asztal">
+<option value="Asztal0">0</option>
+<option value="Asztal1">1</option>
+<option value="Asztal2">2</option>
+<option value="Asztal3">3</option>
+</select>
+<br>
+
+
+<label>Tudja tölteni telefonját, laptopját:</label><br>
+<select name="Toltes">
+<option value="Toltes0">0</option>
+<option value="Toltes1">1</option>
+<option value="Toltes2">2</option>
+<option value="Toltes3">3</option>
+</select>
+<br><br>
+<button type="submit" class="btn" id="preferenciaSave">Mentés</button>
+
+<style>
+    select{
+        border-radius: 10px;
+        background-color:#a7a7a7;
+    }
+    /*button{
+      background-color: red;
+    }
+    */
+    a{
+      color: #EC8F22;
+      margin: 300px;
+
+    }
+
+    a:hover{
+        color: #1A1925;
+    }
+    a{ 
+      background-color:#EC8F22;
+	color:#363636;
+	text-decoration: none;
+	padding: 10px 15px;
+	border-radius: 50px;
+	transition: background 0.3s;}
+   
+
+</style> 
+    </div>
+</body>
+
+<footer>
+<style>
+
+     
+ 
+    body{
+        color: #ec8f22;
+    }
+    label, input{
+        border-radius: 15px;
+     
+    }
+    input{
+        background-color: #a7a7a7;
+     
+    }
+    .kedvezmeny, .kozjelleg{
+        border-radius: 12px;
+        background-color: #a7a7a7;
+    }
+
+    .Bevitel{
+        margin: 15px;
+        margin-left: 250px;
+        background-color: #EC8F22;
+
+    }
+    .ToPrefBtn {
+  border: none;
+  color: #1A1925;
+  padding: 12px 24px;
+  border-radius: 8px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 16px;
+  margin: 4px 2px;
+  background-color:#EC8F22;
+
+}
+
+
+
+
+
+    
+</style>
+</footer>
+
+</html>

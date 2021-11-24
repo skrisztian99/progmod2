@@ -35,7 +35,8 @@ import javax.xml.bind.annotation.XmlTransient;
 @NamedQueries({
     @NamedQuery(name = "Indulas.findAll", query = "SELECT i FROM Indulas i")
     , @NamedQuery(name = "Indulas.findByIdINDULAS", query = "SELECT i FROM Indulas i WHERE i.idINDULAS = :idINDULAS")
-    , @NamedQuery(name = "Indulas.findByIdopont", query = "SELECT i FROM Indulas i WHERE i.idopont = :idopont")})
+    , @NamedQuery(name = "Indulas.findByIdopont", query = "SELECT i FROM Indulas i WHERE i.idopont = :idopont")
+    , @NamedQuery(name = "Indulas.findByDate", query ="SELECT i FROM Indulas i WHERE i.idopont LIKE :date")})
 public class Indulas implements Serializable {
 
     private static final long serialVersionUID = 1L;

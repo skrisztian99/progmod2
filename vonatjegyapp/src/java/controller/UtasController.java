@@ -3,12 +3,15 @@ package controller;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.sql.Date;
+import java.text.SimpleDateFormat;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.Persistence;
+import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 import model.Utas;
 import org.json.JSONObject;
 import service.UtasService;
@@ -26,6 +29,7 @@ public class UtasController extends HttpServlet {
      */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
+        
         response.setContentType("application/json");
         EntityManagerFactory emf = Persistence.createEntityManagerFactory("vonatjegyappPU");
         UtasService uService = new UtasService(emf);
@@ -45,6 +49,7 @@ public class UtasController extends HttpServlet {
                     request.getParameter("password_1") != null && 
                     request.getParameter("password_2") != null){
                         Utas u = new Utas();
+                        u.setIdUtas(2);
                         u.setVezeteknev(request.getParameter("vezeteknev"));
                         u.setKersztnev(request.getParameter("keresztnev"));
                         u.setTelefon(request.getParameter("telefon"));
@@ -52,11 +57,13 @@ public class UtasController extends HttpServlet {
                         u.setVaros(request.getParameter("varos"));
                         u.setUtca(request.getParameter("utca"));
                         u.setHazszam(request.getParameter("hazszam"));
-                        u.setSzulido(Date.valueOf(request.getParameter("szulido")));
-                        if(!request.getParameter("kedvezmeny").equals("Nincs kedvezmény")){
-                            //u.setKEDVEZMENYidKedvezmeny(kEDVEZMENYidKedvezmeny);
+                        SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
+                        String szul = formatter.parse(request.getParameter("szulido")).toString();
+                        u.setSzulido(Date.valueOf(szul));
+                        if(!request.getParameter("kedvezmeny").equals("Nincs Kedvezmény")){
+                            String kedvezmenyNev = request.getParameter("kedvezmeny");
+                            u.setKEDVEZMENYidKedvezmeny(uService.findKedvezmeny(kedvezmenyNev));
                         }
-                        //SUGGESTION: Kedvezmény id kérése a view-tól
                         u.setEmail(request.getParameter("email"));
                         if(request.getParameter("password_1").equals(request.getParameter("password_2"))){
                             u.setJelszo(request.getParameter("password_1"));
@@ -79,31 +86,34 @@ public class UtasController extends HttpServlet {
                     //Jelenlegi utas szerkesztése
                     Integer id = 0; //Bejelentkezett utas azonosítója
                     Utas u = uService.findUtas(id);
+                    //Preferenciák beállítása is itt történik
                 }
                 
                 if(request.getParameter("task").equals("loginUtas")){
-                   if(request.getParameter("loginemail") != null && request.getParameter("loginpassword") != null){
-                       String email = request.getParameter("loginemail");
-                       String jelszo = request.getParameter("loginpassword");
-                       try{
-                           Utas u = uService.findUtasByEmail(email);
-                           if(u.getJelszo().equals(jelszo)){
-                               //Bejelentkezve
-                           }
-                           else{
-                               //Hiba
-                           }
-                       }catch(Exception ex){
-                           //Nem található az email
+                   if(request.getParameter("email") != null && request.getParameter("password") != null){
+                       String email = request.getParameter("email");
+                       String jelszo = request.getParameter("password");
+                       Utas utas = new Utas();
+                       String message = "Hiba";
+                       utas = uService.checkLogin(email, jelszo);
+                       if (utas != null) {
+//                               HttpSession session = request.getSession();
+//                               session.setAttribute("utas", utas);
+                            message = "sikeres";
+                       } else {
+                           message = "Rossz email/jelszó";
                        }
-                       
+                       PrintWriter _package = response.getWriter();
+                       JSONObject obj = new JSONObject();
+                       obj.put("valasz", message);
+                       //obj.put("utas", utas);
+                       _package.write(obj.toString());
                    }
                 }
-                
             }
         }
         catch(Exception ex){
-            
+            System.out.println(ex.toString());
         }
     }
 
@@ -133,6 +143,7 @@ public class UtasController extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
+        processRequest(request, response);
     }
 
     /**

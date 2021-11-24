@@ -1,8 +1,10 @@
 <html>
 <head>
     //A jelszó hossza max 45 lehet!!!
+    <meta charset="UTF-8">
     <title>Terminus - Könnyen, gyorsan</title>
     <link rel="stylesheet" href="css/bootstrap.min.css">
+    <link rel="stylesheet" href="main.css">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script> 
 
@@ -79,46 +81,33 @@
         }
     function formValidation()
     {
-        var uemail = document.getElementById("email");
-        var passid_1 = document.getElementById("password_1");
-        var passid_2 = document.getElementById("password_2");
-        var uvezeteknev = document.getElementById("vezeteknev");
-        var ukeresztnev = document.getElementById("keresztnev");
-        var utelefon = document.getElementById("telefonszam");
-        var uirsz = document.getElementById("telefonszam");
-        var uvaros = document.getElementById("varos");
-        var uutca = document.getElementById("utca");
-        var uhazszam = document.getElementById("hazszam");
-        var uszulido = document.getElementById("szulido");
-        var ukedvezmeny = document.getElementById("kedvezmeny");
-        if(ValidateEmail(uemail))
-        {
-            if(passid_validation(passid_1))
-            {
-                if(passid_match(passid_1, passid_2)){
-                    if(NameValidation(uvezeteknev, ukeresztnev)){
-                        if(onlyNumbers(utelefon)){
-                            if(ZIPValidate(uirsz)){
-                                var requestToSend = {"task": "createUtas", "email": uemail, "password_1": passid_1, "password_2": passid_2, "vezeteknev": uvezeteknev, "keresztnev": ukeresztnev, "telefon": utelefon, "irsz": uirsz, "varos": uvaros, "utca": uutca, "hazszam": uhazszam, "szulido": uszulido, "kedvezmeny": ukedvezmeny};
+        var uemail = document.getElementById("email").value;
+        var passid_1 = document.getElementById("password_1").value;
+        var passid_2 = document.getElementById("password_2").value;
+        var uvezeteknev = document.getElementById("vezeteknev").value;
+        var ukeresztnev = document.getElementById("keresztnev").value;
+        var utelefon = document.getElementById("telefonszam").value;
+        var uirsz = document.getElementById("telefonszam").value;
+        var uvaros = document.getElementById("varos").value;
+        var uutca = document.getElementById("utca").value;
+        var uhazszam = document.getElementById("hazszam").value;
+        var uszulido = document.getElementById("szulido").value;
+        var ukedvezmeny = document.getElementById("kedvezmeny").value;
+
+        var requestToSend = {"task": "createUtas", "email": uemail, "password_1": passid_1, "password_2": passid_2, "vezeteknev": uvezeteknev, "keresztnev": ukeresztnev, "telefon": utelefon, "irsz": uirsz, "varos": uvaros, "utca": uutca, "hazszam": uhazszam, "szulido": uszulido, "kedvezmeny": ukedvezmeny};
                                 $.ajax({
                                    url: "/vonatjegyapp/UtasController",
                                    type: "POST",
-                                   data: requestToSend
+                                   data: requestToSend,
                                    success: function(response){
                                        alert("A regisztráció állapota: "+response.valasz);
-                                       window.location.replace("login.php");
-                                   }
+                                       window.location.replace("login.html");
+                                   },
                                            
                                    error: function(){
                                        alert("Hiba történt! az adatok feltöltése közben!");
                                    }
                                 });
-                            }
-                        }
-                    }
-                }
-            }
-        }
     }
     
     </script>
@@ -197,7 +186,7 @@
                 <input type="password" id="password_2" required>
             </div>
             <div class="input-group">
-                <button type="submit" class="btn" id="reg_user">Regisztráció</button>
+                <button type="submit" class="btn" id="reg_user" onclick="formValidation()">Regisztráció</button>
             </div>
 
         </form>
@@ -206,7 +195,47 @@
 </body>
 
 <footer>
+    <style>
 
+     
+ 
+        body{
+            color: #ec8f22;
+        }
+        label, input{
+            border-radius: 15px;
+         
+        }
+        input{
+            background-color: #a7a7a7;
+         
+        }
+        .kedvezmeny, .kozjelleg{
+            border-radius: 12px;
+            background-color: #a7a7a7;
+        }
+    
+        .Bevitel{
+            margin: 15px;
+            margin-left: 250px;
+            background-color: #EC8F22;
+    
+        }
+        .ToPrefBtn {
+      border: none;
+      color: #1A1925;
+      padding: 12px 24px;
+      border-radius: 8px;
+      text-align: center;
+      text-decoration: none;
+      display: inline-block;
+      font-size: 16px;
+      margin: 4px 2px;
+      background-color:#EC8F22;
+    
+    
+    } 
+    </style>
 </footer>
 
 </html>

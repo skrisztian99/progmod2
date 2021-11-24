@@ -6,8 +6,8 @@ import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import model.Jegy;
 import model.Kedvezmeny;
-import model.Preferencia;
 import model.Utas;
+import model.UtasPreferencia;
 
 public class UtasService {
     public UtasService(EntityManagerFactory emf) {
@@ -20,52 +20,24 @@ public class UtasService {
     }
 
     public Boolean create(Utas utas) throws Exception {
-        if (utas.getPreferenciaList() == null) {
-            utas.setPreferenciaList(new ArrayList<Preferencia>());
-        }
-        if (utas.getJegyList() == null) {
-            utas.setJegyList(new ArrayList<Jegy>());
+        if (utas.getUtasPreferenciaList() == null) {
+            utas.setUtasPreferenciaList(new ArrayList<UtasPreferencia>());
         }
         EntityManager em = null;
         try {
-            em = getEntityManager();
-            em.getTransaction().begin();
+            em = utas.getEntityManager();
             Kedvezmeny KEDVEZMENYidKedvezmeny = utas.getKEDVEZMENYidKedvezmeny();
             if (KEDVEZMENYidKedvezmeny != null) {
                 KEDVEZMENYidKedvezmeny = em.getReference(KEDVEZMENYidKedvezmeny.getClass(), KEDVEZMENYidKedvezmeny.getIdKedvezmeny());
                 utas.setKEDVEZMENYidKedvezmeny(KEDVEZMENYidKedvezmeny);
             }
-            List<Preferencia> attachedPreferenciaList = new ArrayList<Preferencia>();
-            for (Preferencia preferenciaListPreferenciaToAttach : utas.getPreferenciaList()) {
-                preferenciaListPreferenciaToAttach = em.getReference(preferenciaListPreferenciaToAttach.getClass(), preferenciaListPreferenciaToAttach.getIdPreferencia());
-                attachedPreferenciaList.add(preferenciaListPreferenciaToAttach);
+            List<UtasPreferencia> attachedUtasPreferenciaList = new ArrayList<UtasPreferencia>();
+            for (UtasPreferencia utasPreferenciaListUtasPreferenciaToAttach : utas.getUtasPreferenciaList()) {
+                utasPreferenciaListUtasPreferenciaToAttach = em.getReference(utasPreferenciaListUtasPreferenciaToAttach.getClass(), utasPreferenciaListUtasPreferenciaToAttach.getUtasPreferenciaPK());
+                attachedUtasPreferenciaList.add(utasPreferenciaListUtasPreferenciaToAttach);
             }
-            utas.setPreferenciaList(attachedPreferenciaList);
-            List<Jegy> attachedJegyList = new ArrayList<Jegy>();
-            for (Jegy jegyListJegyToAttach : utas.getJegyList()) {
-                jegyListJegyToAttach = em.getReference(jegyListJegyToAttach.getClass(), jegyListJegyToAttach.getIdJEGY());
-                attachedJegyList.add(jegyListJegyToAttach);
-            }
-            utas.setJegyList(attachedJegyList);
-            em.persist(utas);
-            if (KEDVEZMENYidKedvezmeny != null) {
-                KEDVEZMENYidKedvezmeny.getUtasList().add(utas);
-                KEDVEZMENYidKedvezmeny = em.merge(KEDVEZMENYidKedvezmeny);
-            }
-            for (Preferencia preferenciaListPreferencia : utas.getPreferenciaList()) {
-                preferenciaListPreferencia.getUtasList().add(utas);
-                preferenciaListPreferencia = em.merge(preferenciaListPreferencia);
-            }
-            for (Jegy jegyListJegy : utas.getJegyList()) {
-                Utas oldIdUtasOfJegyListJegy = jegyListJegy.getIdUtas();
-                jegyListJegy.setIdUtas(utas);
-                jegyListJegy = em.merge(jegyListJegy);
-                if (oldIdUtasOfJegyListJegy != null) {
-                    oldIdUtasOfJegyListJegy.getJegyList().remove(jegyListJegy);
-                    oldIdUtasOfJegyListJegy = em.merge(oldIdUtasOfJegyListJegy);
-                }
-            }
-            em.getTransaction().commit();
+            utas.setUtasPreferenciaList(attachedUtasPreferenciaList);
+            Utas.save(utas);
             return Boolean.TRUE;
         } catch (Exception ex) {
             return Boolean.FALSE;
@@ -76,10 +48,23 @@ public class UtasService {
         }
     }
     
+    public Utas checkLogin(String email, String jelszo){
+        EntityManager em = getEntityManager();
+        Utas u = null;
+        if(!em.createNamedQuery("Utas.findByEmail").setParameter("email", email).getResultList().isEmpty()){
+            u = Utas.login(email, jelszo);
+        }
+        return u;
+    }
+    
     public Utas findUtas(Integer id) {
         EntityManager em = getEntityManager();
         try {
-            return em.find(Utas.class, id);
+            Utas u = new Utas();
+            if(!em.createNamedQuery("Utas.findByIdUtas").setParameter("id", id).getResultList().isEmpty()){
+                u.getById(id);
+            }
+            return u;
         } finally {
             em.close();
         }
@@ -88,11 +73,38 @@ public class UtasService {
     public Utas findUtasByEmail(String email){
         EntityManager em = getEntityManager();
         try{
-            return em.find(Utas.class, email);
+            Utas u = new Utas();
+            if(!em.createNamedQuery("Utas.findByEmail").setParameter("email", email).getResultList().isEmpty()){
+                u.getByString(email);
+            }
+            return u;
         }finally{
-            em.close();
+            if (em != null) {
+                em.close();
+            }
         }
     }
+    
+    public Kedvezmeny findKedvezmeny(String nev){
+        EntityManager em = getEntityManager();
+        try{
+            Kedvezmeny k = new Kedvezmeny();
+            if(!em.createNamedQuery("Kedvezmeny.findByMegnevezes").setParameter("megnevezes", nev).getResultList().isEmpty()){
+                k.getByString(nev);
+            }
+            return k;
+        }finally{
+            if (em != null) {
+                em.close();
+            }
+        }
+    }
+    
+    public List<Jegy> getJegyList(Utas u){
+        List<Jegy> jegyList = u.getJegyList();
+        return jegyList;
+    }
+    
     
     public Boolean edit(Utas utas) throws Exception {
         EntityManager em = null;
@@ -100,50 +112,50 @@ public class UtasService {
             em = getEntityManager();
             em.getTransaction().begin();
             Utas persistentUtas = em.find(Utas.class, utas.getIdUtas());
-            Kedvezmeny kedvezmenyidKedvezmenyOld = persistentUtas.getKEDVEZMENYidKedvezmeny();
-            Kedvezmeny kedvezmenyidKedvezmenyNew = utas.getKEDVEZMENYidKedvezmeny();
-            List<Jegy> jegyListOld = persistentUtas.getJegyList();
-            List<Jegy> jegyListNew = utas.getJegyList();
+            Kedvezmeny KEDVEZMENYidKedvezmenyOld = persistentUtas.getKEDVEZMENYidKedvezmeny();
+            Kedvezmeny KEDVEZMENYidKedvezmenyNew = utas.getKEDVEZMENYidKedvezmeny();
+            List<UtasPreferencia> utasPreferenciaListOld = persistentUtas.getUtasPreferenciaList();
+            List<UtasPreferencia> utasPreferenciaListNew = utas.getUtasPreferenciaList();
             List<String> illegalOrphanMessages = null;
-            for (Jegy jegyListOldJegy : jegyListOld) {
-                if (!jegyListNew.contains(jegyListOldJegy)) {
+            for (UtasPreferencia utasPreferenciaListOldUtasPreferencia : utasPreferenciaListOld) {
+                if (!utasPreferenciaListNew.contains(utasPreferenciaListOldUtasPreferencia)) {
                     if (illegalOrphanMessages == null) {
                         illegalOrphanMessages = new ArrayList<String>();
                     }
-                    illegalOrphanMessages.add("You must retain Jegy " + jegyListOldJegy + " since its idUtas field is not nullable.");
+                    illegalOrphanMessages.add("You must retain UtasPreferencia " + utasPreferenciaListOldUtasPreferencia + " since its utas field is not nullable.");
                 }
             }
             if (illegalOrphanMessages != null) {
                 throw new Exception((Throwable) illegalOrphanMessages);
             }
-            if (kedvezmenyidKedvezmenyNew != null) {
-                kedvezmenyidKedvezmenyNew = em.getReference(kedvezmenyidKedvezmenyNew.getClass(), kedvezmenyidKedvezmenyNew.getIdKedvezmeny());
-                utas.setKEDVEZMENYidKedvezmeny(kedvezmenyidKedvezmenyNew);
+            if (KEDVEZMENYidKedvezmenyNew != null) {
+                KEDVEZMENYidKedvezmenyNew = em.getReference(KEDVEZMENYidKedvezmenyNew.getClass(), KEDVEZMENYidKedvezmenyNew.getIdKedvezmeny());
+                utas.setKEDVEZMENYidKedvezmeny(KEDVEZMENYidKedvezmenyNew);
             }
-            List<Jegy> attachedJegyListNew = new ArrayList<Jegy>();
-            for (Jegy jegyListNewJegyToAttach : jegyListNew) {
-                jegyListNewJegyToAttach = em.getReference(jegyListNewJegyToAttach.getClass(), jegyListNewJegyToAttach.getIdJEGY());
-                attachedJegyListNew.add(jegyListNewJegyToAttach);
+            List<UtasPreferencia> attachedUtasPreferenciaListNew = new ArrayList<UtasPreferencia>();
+            for (UtasPreferencia utasPreferenciaListNewUtasPreferenciaToAttach : utasPreferenciaListNew) {
+                utasPreferenciaListNewUtasPreferenciaToAttach = em.getReference(utasPreferenciaListNewUtasPreferenciaToAttach.getClass(), utasPreferenciaListNewUtasPreferenciaToAttach.getUtasPreferenciaPK());
+                attachedUtasPreferenciaListNew.add(utasPreferenciaListNewUtasPreferenciaToAttach);
             }
-            jegyListNew = attachedJegyListNew;
-            utas.setJegyList(jegyListNew);
+            utasPreferenciaListNew = attachedUtasPreferenciaListNew;
+            utas.setUtasPreferenciaList(utasPreferenciaListNew);
             utas = em.merge(utas);
-            if (kedvezmenyidKedvezmenyOld != null && !kedvezmenyidKedvezmenyOld.equals(kedvezmenyidKedvezmenyNew)) {
-                kedvezmenyidKedvezmenyOld.getUtasList().remove(utas);
-                kedvezmenyidKedvezmenyOld = em.merge(kedvezmenyidKedvezmenyOld);
+            if (KEDVEZMENYidKedvezmenyOld != null && !KEDVEZMENYidKedvezmenyOld.equals(KEDVEZMENYidKedvezmenyNew)) {
+                KEDVEZMENYidKedvezmenyOld.getUtasList().remove(utas);
+                KEDVEZMENYidKedvezmenyOld = em.merge(KEDVEZMENYidKedvezmenyOld);
             }
-            if (kedvezmenyidKedvezmenyNew != null && !kedvezmenyidKedvezmenyNew.equals(kedvezmenyidKedvezmenyOld)) {
-                kedvezmenyidKedvezmenyNew.getUtasList().add(utas);
-                kedvezmenyidKedvezmenyNew = em.merge(kedvezmenyidKedvezmenyNew);
+            if (KEDVEZMENYidKedvezmenyNew != null && !KEDVEZMENYidKedvezmenyNew.equals(KEDVEZMENYidKedvezmenyOld)) {
+                KEDVEZMENYidKedvezmenyNew.getUtasList().add(utas);
+                KEDVEZMENYidKedvezmenyNew = em.merge(KEDVEZMENYidKedvezmenyNew);
             }
-            for (Jegy jegyListNewJegy : jegyListNew) {
-                if (!jegyListOld.contains(jegyListNewJegy)) {
-                    Utas oldIdUtasOfJegyListNewJegy = jegyListNewJegy.getIdUtas();
-                    jegyListNewJegy.setIdUtas(utas);
-                    jegyListNewJegy = em.merge(jegyListNewJegy);
-                    if (oldIdUtasOfJegyListNewJegy != null && !oldIdUtasOfJegyListNewJegy.equals(utas)) {
-                        oldIdUtasOfJegyListNewJegy.getJegyList().remove(jegyListNewJegy);
-                        oldIdUtasOfJegyListNewJegy = em.merge(oldIdUtasOfJegyListNewJegy);
+            for (UtasPreferencia utasPreferenciaListNewUtasPreferencia : utasPreferenciaListNew) {
+                if (!utasPreferenciaListOld.contains(utasPreferenciaListNewUtasPreferencia)) {
+                    Utas oldUtasOfUtasPreferenciaListNewUtasPreferencia = utasPreferenciaListNewUtasPreferencia.getUtas();
+                    utasPreferenciaListNewUtasPreferencia.setUtas(utas);
+                    utasPreferenciaListNewUtasPreferencia = em.merge(utasPreferenciaListNewUtasPreferencia);
+                    if (oldUtasOfUtasPreferenciaListNewUtasPreferencia != null && !oldUtasOfUtasPreferenciaListNewUtasPreferencia.equals(utas)) {
+                        oldUtasOfUtasPreferenciaListNewUtasPreferencia.getUtasPreferenciaList().remove(utasPreferenciaListNewUtasPreferencia);
+                        oldUtasOfUtasPreferenciaListNewUtasPreferencia = em.merge(oldUtasOfUtasPreferenciaListNewUtasPreferencia);
                     }
                 }
             }

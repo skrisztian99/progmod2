@@ -8,6 +8,7 @@ package model;
 import java.io.Serializable;
 import java.util.List;
 import javax.persistence.Basic;
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -18,6 +19,7 @@ import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
@@ -36,6 +38,9 @@ import javax.xml.bind.annotation.XmlTransient;
     , @NamedQuery(name = "Preferencia.findByIdPreferencia", query = "SELECT p FROM Preferencia p WHERE p.idPreferencia = :idPreferencia")
     , @NamedQuery(name = "Preferencia.findByMegnevezes", query = "SELECT p FROM Preferencia p WHERE p.megnevezes = :megnevezes")})
 public class Preferencia implements Serializable {
+
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "preferencia")
+    private List<UtasPreferencia> utasPreferenciaList;
 
     private static final long serialVersionUID = 1L;
     @Id
@@ -130,6 +135,15 @@ public class Preferencia implements Serializable {
     @Override
     public String toString() {
         return "model.Preferencia[ idPreferencia=" + idPreferencia + " ]";
+    }
+
+    @XmlTransient
+    public List<UtasPreferencia> getUtasPreferenciaList() {
+        return utasPreferenciaList;
+    }
+
+    public void setUtasPreferenciaList(List<UtasPreferencia> utasPreferenciaList) {
+        this.utasPreferenciaList = utasPreferenciaList;
     }
     
 }
