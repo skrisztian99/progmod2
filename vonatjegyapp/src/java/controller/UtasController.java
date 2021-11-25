@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.sql.Date;
 import java.text.SimpleDateFormat;
+import java.util.List;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.Persistence;
 import javax.servlet.RequestDispatcher;
@@ -13,6 +14,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import model.Utas;
+import model.UtasPreferencia;
 import org.json.JSONObject;
 import service.UtasService;
 
@@ -36,69 +38,93 @@ public class UtasController extends HttpServlet {
         try {
             if(request.getParameter("task") != null){
                 if(request.getParameter("task").equals("createUtas")){
-                    if(request.getParameter("vezeteknev") != null &&
-                    request.getParameter("keresztnev") != null &&
-                    request.getParameter("telefon") != null &&
-                    request.getParameter("irsz") != null && 
-                    request.getParameter("varos") != null &&
-                    request.getParameter("utca") != null && 
-                    request.getParameter("hazszam") != null &&
-                    request.getParameter("szulido") != null &&
-                    request.getParameter("kedvezmeny") != null &&
-                    request.getParameter("email") != null && 
-                    request.getParameter("password_1") != null && 
-                    request.getParameter("password_2") != null){
-                        Utas u = new Utas();
-                        u.setIdUtas(2);
-                        u.setVezeteknev(request.getParameter("vezeteknev"));
-                        u.setKersztnev(request.getParameter("keresztnev"));
-                        u.setTelefon(request.getParameter("telefon"));
-                        u.setIranyitoszam(request.getParameter("irsz"));
-                        u.setVaros(request.getParameter("varos"));
-                        u.setUtca(request.getParameter("utca"));
-                        u.setHazszam(request.getParameter("hazszam"));
+                        String vnev = request.getParameter("vezeteknev");
+                        String knev = request.getParameter("keresztnev");
+                        String telefon = request.getParameter("telefon");
+                        String irsz = request.getParameter("irsz");
+                        String varos = request.getParameter("varos");
+                        String utca = request.getParameter("utca");
+                        String hazszam = request.getParameter("hazszam");
                         SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
-                        String szul = formatter.parse(request.getParameter("szulido")).toString();
-                        u.setSzulido(Date.valueOf(szul));
-                        if(!request.getParameter("kedvezmeny").equals("Nincs Kedvezmény")){
+                        String szulString = formatter.parse(request.getParameter("szulido")).toString();
+                        Date szul = Date.valueOf(szulString);
+                        if(!request.getParameter("kedvezmeny").equals("Nincs Kedvezmény") && !request.getParameter("kedvezmeny").equals("Nincs+Kedvezmény")){
                             String kedvezmenyNev = request.getParameter("kedvezmeny");
-                            u.setKEDVEZMENYidKedvezmeny(uService.findKedvezmeny(kedvezmenyNev));
+                            //u.setKEDVEZMENYidKedvezmeny(uService.findKedvezmeny(kedvezmenyNev));
                         }
-                        u.setEmail(request.getParameter("email"));
+                        String email = request.getParameter("email");
+                        String jelszo = "";
+                        String msg = "Hiba";
                         if(request.getParameter("password_1").equals(request.getParameter("password_2"))){
-                            u.setJelszo(request.getParameter("password_1"));
+                            jelszo = request.getParameter("password_1");
+                            Utas u = new Utas(2, vnev, knev, email, szul, irsz, varos, utca, hazszam, jelszo);
+                            u.setTelefon(telefon);
+                            if(uService.create(u)){
+                                msg = "Siker";
+                            }
                         }
                         else{
-                            //Nem egyezik meg a két jelszó
-                        }
-                        String msg = "Hiba";
-                        if(uService.create(u)){
-                            msg = "Siker";
+                            msg = "Nem egyezik meg a két jelszó";
                         }
                         PrintWriter _package = response.getWriter();
                         JSONObject obj = new JSONObject();
                         obj.put("valasz", msg);
                         _package.write(obj.toString());
-                    }
+                        
+                    
                 }
                 
-                if(request.getParameter("task").equals("editUtas")){
-                    //Jelenlegi utas szerkesztése
-                    Integer id = 0; //Bejelentkezett utas azonosítója
+                if(request.getParameter("task").equals("setPreferencia")){
+                    Integer id = 1;
                     Utas u = uService.findUtas(id);
-                    //Preferenciák beállítása is itt történik
+                    List<UtasPreferencia> utasPrefList = u.getUtasPreferenciaList();
+                    if(!request.getParameter("ablakmellett").equals("0")){
+                        UtasPreferencia up = new UtasPreferencia(id, 1);
+                        up.setFontossag(Integer.parseInt(request.getParameter("ablakmellett")));
+                        utasPrefList.add(up);
+                    }
+                    if(!request.getParameter("ellentetes").equals("0")){
+                        UtasPreferencia up = new UtasPreferencia(id, 2);
+                        up.setFontossag(Integer.parseInt(request.getParameter("ellentetes")));
+                        utasPrefList.add(up);
+                    }
+                    if(!request.getParameter("asztal").equals("0")){
+                        UtasPreferencia up = new UtasPreferencia(id, 3);
+                        up.setFontossag(Integer.parseInt(request.getParameter("asztal")));
+                        utasPrefList.add(up);
+                    }
+                    if(!request.getParameter("toltes").equals("0")){
+                        UtasPreferencia up = new UtasPreferencia(id, 4);
+                        up.setFontossag(Integer.parseInt(request.getParameter("toltes")));
+                        utasPrefList.add(up);
+                    }
+                    if(!request.getParameter("ajtomellett").equals("0")){
+                        UtasPreferencia up = new UtasPreferencia(id, 5);
+                        up.setFontossag(Integer.parseInt(request.getParameter("ajtomellett")));
+                        utasPrefList.add(up);
+                    }
+                    String msg = "Hiba";
+                    if(uService.edit(u)){
+                        msg = "Sikeres mentés";
+                    }
+                    else{
+                        msg = "Hiba";
+                    }
+                    PrintWriter _package = response.getWriter();
+                    JSONObject obj = new JSONObject();
+                    obj.put("valasz", msg);
+                    _package.write(obj.toString());
                 }
                 
                 if(request.getParameter("task").equals("loginUtas")){
                    if(request.getParameter("email") != null && request.getParameter("password") != null){
                        String email = request.getParameter("email");
                        String jelszo = request.getParameter("password");
-                       Utas utas = new Utas();
                        String message = "Hiba";
-                       utas = uService.checkLogin(email, jelszo);
+                       Utas utas = uService.checkLogin(email, jelszo);
                        if (utas != null) {
-//                               HttpSession session = request.getSession();
-//                               session.setAttribute("utas", utas);
+                               HttpSession session = request.getSession();
+                               session.setAttribute("utas", utas);
                             message = "sikeres";
                        } else {
                            message = "Rossz email/jelszó";

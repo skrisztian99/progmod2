@@ -332,7 +332,7 @@ public class Utas implements Serializable, Dao{
         em.close();
     }
     
-    public static Utas login(String email, String jelszo){
+    public static Utas login(String email){
         EntityManagerFactory emf = Persistence.createEntityManagerFactory("vonatjegyappPU");
         EntityManager em = emf.createEntityManager();
         Utas u = (Utas) em.createNamedQuery("Utas.findByEmail").setParameter("email", email).getResultList().get(0);

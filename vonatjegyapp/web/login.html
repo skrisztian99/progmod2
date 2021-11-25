@@ -20,7 +20,7 @@
             var requestToSend = {"task": "loginUtas", "email": uemail, "password": passid};
             
             $.ajax({
-                url: "/vonatjegyapp/UtasController",
+                url: "/UtasController",
                 type: "POST",
                 data: requestToSend,
                 success: function(response){
@@ -40,11 +40,11 @@
 <body>
     <h2>Írja be az email címét és jelszavát!</h2>
     <div class="container">
-        <form class="form-signin">
+        <form method="post" class="form-signin" onsubmit="loginUtas()">
             <h4 class="form-signin-heading"></h4>
-            <input type="text" class="form-control" id="email" placeholder="Az ön email címe" required autofocus>
-            <input type="password" class="form-control" id="password" placeholder="Az ön jelszava" required>
-            <button class="btn btn-lg btn primary btn-block" type="submit" name="login" onclick="loginUtas()">Bejelentkezés</button>
+            <input type="text" class="form-control" id="email" name="email" placeholder="Az ön email címe" required autofocus>
+            <input type="password" class="form-control" id="password" name="password" placeholder="Az ön jelszava" required>
+            <button class="btn btn-lg btn primary btn-block" type="submit" name="login">Bejelentkezés</button>
             <p>Még nem regisztrált?
                 <a href="register.html">Kattintson ide!</a>
             </p>

@@ -94,7 +94,7 @@ public class JegyService {
     
     public List<VonatJaratIndulas> getJaratIndulasList(String datum, String megallo){ //Időponthoz és megállóhoz tartozó járatok listája
         EntityManager em = getEntityManager();
-        String idop = datum + " %"; //
+        String idop = datum + " %";
         List<Indulas> iList = em.createNamedQuery("Indulas.findByDate").setParameter("date", idop).getResultList();
         Megallo m = (Megallo) em.createNamedQuery("Megallo.findByNev").setParameter("nev", megallo).getResultList().get(0);
         List<VonatJaratIndulas> megfelelo = new ArrayList<>();
@@ -166,5 +166,21 @@ public class JegyService {
             }
         }
         return returnList;
+    }
+    
+    public Ules findUles(Integer ulesId, Integer vagonId, Integer vonatId){
+        EntityManager em = getEntityManager();
+        Ules u = (Ules) em.createNamedQuery("Ules.findUles").setParameter("idULES", ulesId).setParameter("idVAGON", vagonId).setParameter("idVONAT", vonatId).getResultList().get(0);
+        return u;
+    }
+    public Jarat findJarat(Integer id){
+        EntityManager em = getEntityManager();
+        Jarat j = em.find(Jarat.class, id);
+        return j;
+    }
+    public Megallo findMegallo(String nev){
+        EntityManager em = getEntityManager();
+        Megallo m = (Megallo) em.createNamedQuery("Megallo.findByNev").setParameter("nev", nev).getResultList().get(0);
+        return m;
     }
 }

@@ -12,11 +12,17 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import model.Jarat;
 import model.JaratMegallo;
+import model.Jegy;
+import model.Megallo;
+import model.Ules;
+import model.Utas;
 import model.VonatJaratIndulas;
 import org.json.JSONArray;
 import org.json.JSONObject;
 import service.JegyService;
+import service.UtasService;
 
 public class JegyController extends HttpServlet {
 
@@ -35,11 +41,44 @@ public class JegyController extends HttpServlet {
         response.setContentType("application/json");
         EntityManagerFactory emf = Persistence.createEntityManagerFactory("vonatjegyappPU");
         JegyService jService = new JegyService(emf);
+        UtasService uService = new UtasService(emf);
         try{
             if(request.getParameter("task") != null){
                 if(request.getParameter("task").equals("createJegy")){
                     if(request.getParameter("") != null){
-                        //TODO(Service kész)
+                        Integer idUtas = 1;
+                        Utas u = uService.findUtas(idUtas);
+                        Integer ulesId = Integer.parseInt(request.getParameter("ulesid"));
+                        Integer vagonId = Integer.parseInt(request.getParameter("vagonid"));
+                        Integer vonatId = Integer.parseInt(request.getParameter("vonatid"));
+                        Ules ules = jService.findUles(ulesId, vagonId, vonatId);
+                        String honnanNev = request.getParameter("honnan");
+                        Megallo honnan = jService.findMegallo(honnanNev);
+                        String hova = request.getParameter("hova");
+                        Integer jaratid = Integer.parseInt(request.getParameter("jaratid"));
+                        Jarat jarat = jService.findJarat(jaratid);
+                        JaratMegallo jm = jService.getJaratMegallo(jarat, hova);
+                        String indulasString = request.getParameter("indulas");
+                        SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
+                        Date indulas = formatter.parse(indulasString);
+                        Date kiallitas = new Date(System.currentTimeMillis());
+                        Integer ar = ules.getEgysegar() * jm.getTavolsag();
+                        Jegy j = new Jegy();
+                        j.setIdUtas(u);
+                        j.setUles(ules);
+                        j.setIdHonnan(honnan);
+                        j.setJaratMegallo(jm);
+                        j.setKiallitasidatum(kiallitas);
+                        j.setIndulasidopont(indulas);
+                        j.setAr(ar);
+                        String msg = "Hiba";
+                        if(jService.create(j)){
+                            msg = "Sikeres";
+                        }
+                        PrintWriter _package = response.getWriter();
+                        JSONObject obj = new JSONObject();
+                        obj.put("valasz", msg);
+                        _package.write(obj.toString());
                     }
                 }
                 if(request.getParameter("task").equals("listHelyek")){

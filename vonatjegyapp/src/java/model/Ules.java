@@ -36,7 +36,8 @@ import javax.xml.bind.annotation.XmlTransient;
     , @NamedQuery(name = "Ules.findByIdULES", query = "SELECT u FROM Ules u WHERE u.ulesPK.idULES = :idULES")
     , @NamedQuery(name = "Ules.findByIdVAGON", query = "SELECT u FROM Ules u WHERE u.ulesPK.idVAGON = :idVAGON")
     , @NamedQuery(name = "Ules.findByIdVONAT", query = "SELECT u FROM Ules u WHERE u.ulesPK.idVONAT = :idVONAT")
-    , @NamedQuery(name = "Ules.findByEgysegar", query = "SELECT u FROM Ules u WHERE u.egysegar = :egysegar")})
+    , @NamedQuery(name = "Ules.findByEgysegar", query = "SELECT u FROM Ules u WHERE u.egysegar = :egysegar")
+    , @NamedQuery(name = "Ules.findUles", query = "SELECT u FROM Ules u WHERE u.ulesPK.idULES = :idULES AND u.ulesPK.idVAGON = :idVAGON AND u.ulesPK.idVONAT = :idVONAT")})
 public class Ules implements Serializable {
 
     private static final long serialVersionUID = 1L;

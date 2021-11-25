@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
+import javax.persistence.Persistence;
 import model.Jegy;
 import model.Kedvezmeny;
 import model.Utas;
@@ -13,7 +14,7 @@ public class UtasService {
     public UtasService(EntityManagerFactory emf) {
         this.emf = emf;
     }
-    private EntityManagerFactory emf = null;
+    private EntityManagerFactory emf = Persistence.createEntityManagerFactory("vonatjegyappPU");
 
     public EntityManager getEntityManager() {
         return emf.createEntityManager();
@@ -25,7 +26,7 @@ public class UtasService {
         }
         EntityManager em = null;
         try {
-            em = utas.getEntityManager();
+            em = getEntityManager();
             Kedvezmeny KEDVEZMENYidKedvezmeny = utas.getKEDVEZMENYidKedvezmeny();
             if (KEDVEZMENYidKedvezmeny != null) {
                 KEDVEZMENYidKedvezmeny = em.getReference(KEDVEZMENYidKedvezmeny.getClass(), KEDVEZMENYidKedvezmeny.getIdKedvezmeny());
@@ -52,7 +53,9 @@ public class UtasService {
         EntityManager em = getEntityManager();
         Utas u = null;
         if(!em.createNamedQuery("Utas.findByEmail").setParameter("email", email).getResultList().isEmpty()){
-            u = Utas.login(email, jelszo);
+            Utas a = (Utas) em.createNamedQuery("Utas.findByEmail").setParameter("email", email).getResultList().get(0);
+            if(a.getJelszo().equals(jelszo))
+                u = Utas.login(email);
         }
         return u;
     }
