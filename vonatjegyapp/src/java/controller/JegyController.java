@@ -1,7 +1,9 @@
 package controller;
 
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.PrintWriter;
+import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
@@ -19,6 +21,7 @@ import model.Megallo;
 import model.Ules;
 import model.Utas;
 import model.VonatJaratIndulas;
+import org.apache.pdfbox.pdmodel.PDDocument;
 import org.json.JSONArray;
 import org.json.JSONObject;
 import service.JegyService;
@@ -79,7 +82,14 @@ public class JegyController extends HttpServlet {
                         JSONObject obj = new JSONObject();
                         obj.put("valasz", msg);
                         _package.write(obj.toString());
-                    }
+                        
+                        Date date = Calendar.getInstance().getTime();
+                        DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
+                        String strDate = dateFormat.format(date);
+                        
+                        createPDF create = new createPDF();
+                        create.createPDF(u.getVezeteknev()+" "+ u.getKersztnev(), request.getParameter("honnan"), hova,"1", vagonId.toString(), ulesId.toString(),request.getParameter("fizetendo"), strDate, request.getParameter("jegyid"), indulasString, request.getParameter("odavissza"));
+                        }
                 }
                 if(request.getParameter("task").equals("listHelyek")){
                     //TODO (Service kész)
