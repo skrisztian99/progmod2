@@ -10,12 +10,15 @@ import java.util.List;
 import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.EntityManager;
+import javax.persistence.EntityManagerFactory;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
+import javax.persistence.Persistence;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
@@ -34,7 +37,7 @@ import javax.xml.bind.annotation.XmlTransient;
     , @NamedQuery(name = "Kedvezmeny.findByIdKedvezmeny", query = "SELECT k FROM Kedvezmeny k WHERE k.idKedvezmeny = :idKedvezmeny")
     , @NamedQuery(name = "Kedvezmeny.findByMegnevezes", query = "SELECT k FROM Kedvezmeny k WHERE k.megnevezes = :megnevezes")
     , @NamedQuery(name = "Kedvezmeny.findByMertek", query = "SELECT k FROM Kedvezmeny k WHERE k.mertek = :mertek")})
-public class Kedvezmeny implements Serializable {
+public class Kedvezmeny implements Serializable, Dao {
 
     private static final long serialVersionUID = 1L;
     @Id
@@ -123,6 +126,24 @@ public class Kedvezmeny implements Serializable {
     @Override
     public String toString() {
         return "model.Kedvezmeny[ idKedvezmeny=" + idKedvezmeny + " ]";
+    }
+    
+    private EntityManagerFactory emf = Persistence.createEntityManagerFactory("vonatjegyappPU");
+    public EntityManager getEntityManager() {
+        return emf.createEntityManager();
+    }
+    private EntityManager entityManager = getEntityManager();
+    @Override
+    public List<Kedvezmeny> getAll(){
+        return entityManager.createNamedQuery("Kedvezmeny.findAll").getResultList();
+    }
+    @Override 
+    public Kedvezmeny getById(Integer id){
+        return entityManager.find(Kedvezmeny.class, id);
+    }
+    @Override
+    public Kedvezmeny getByString(String nev){
+        return (Kedvezmeny) entityManager.createNamedQuery("Kedvezmeny.findByMegnevezes").setParameter("megnevezes", nev).getSingleResult();
     }
     
 }

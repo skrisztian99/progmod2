@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta carset="utf-8">
+	<title>Jegyvásárlás</title>
+	<link rel="stylesheet" href="main.css">
+</head>
+<body>
+<h1>Jegyvásárlás</h1>
+<form method="post" name="purchase" onsubmit="purchaseTicket()">  
+    <label>Név: </label>
+    <input type="text" name="nev" size="20" id="nev" required>  
+	<br><br>
+        <label>Indulás: </label><br>
+        <select class="combo" name="Honnan", id="honnan" onchange="setPrice()" required>
+		<option value="Válaszd ki">Válaszd ki....</option>
+		<option value="Budapest">Budapest</option>
+		<option value="Pécs">Pécs</option>
+		<option value="Dombóvár">Dombóvár</option>
+		<option value="Kaposvár">Kaposvár</option>
+		<option value="Szekszárd">Szekszárd</option>
+		<option value="Siófok">Siófok</option>
+		<option value="Zamárdi">Zamárdi</option>
+		<option value="Balatonfüred">Balatonfüred</option>
+		<option value="Veszprém">Veszprém</option>
+		<option value="Nagydorog">Nagydorog</option></select>
+<br><br> <label>Érkezés: </label><br>
+        <select class="combo" name="Hova", id="hova" onchange="setPrice()" required>
+		<option value="Válaszd ki">Válaszd ki....</option>
+		<option value="Budapest">Budapest</option>
+		<option value="Pécs">Pécs</option>
+		<option value="Dombóvár">Dombóvár</option>
+		<option value="Kaposvár">Kaposvár</option>
+		<option value="Szekszárd">Szekszárd</option>
+		<option value="Siófok">Siófok</option>
+		<option value="Zamárdi">Zamárdi</option>
+		<option value="Balatonfüred">Balatonfüred</option>
+		<option value="Veszprém">Veszprém</option>
+		<option value="Nagydorog">Nagydorog</option></select>
+	<br><br>
+        <label>Időpont: </label><br>
+<br><input type="date" name="idopont", id="indulas" required>
+        <label>Oda-vissza?</label>
+        <input type="checkbox" id="odavissza">
+      
+        <script>
+            function generateUUID() { // Public Domain/MIT
+    var d = new Date().getTime();//Timestamp
+    var d2 = ((typeof performance !== 'undefined') && performance.now && (performance.now()*1000)) || 0;//Time in microseconds since page-load or 0 if unsupported
+    return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
+        var r = Math.random() * 16;//random number between 0 and 16
+        if(d > 0){//Use timestamp until depleted
+            r = (d + r)%16 | 0;
+            d = Math.floor(d/16);
+        } else {//Use microseconds since page-load if supported
+            r = (d2 + r)%16 | 0;
+            d2 = Math.floor(d2/16);
+        }
+        return (c === 'x' ? r : (r & 0x3 | 0x8)).toString(16);
+    });
+}
+            function setPrice(){
+            var ar = document.getElementById("ar");
+            if($('#honnan').val() === $('#hova').val()){
+                ar.style = ('display: none');
+            } else {
+                ar.innerHTML = "3000 Ft";
+            }
+        }
+        var nev = document.getElementById("nev");
+        var honnan = document.getElementById("honnan");
+        var hova = document.getElementById("hova");
+        var indulas = document.getElementById("indulas");
+        var ulesszam = 10; //TODO
+        var vagonszam = 2;
+        var vonatszam = 3;
+        var fizetendo = document.getElementById("ar");
+        var odavissza = "";
+        var jegyazonosito = generateUUID();
+        if(document.getElementById("odavissza").checked === true){
+             odavissza = "Igen";
+        }
+        else {
+            odavissza = "Nem";
+        }
+        var requestToSend = {"task": "createJegy", "honnan": honnan, "hova": hova, "indulas": indulas, "ulesid": ulesszam, "vagonid": vagonszam, "vonatid": vonatszam, "fizetendo": fizetendo, "odavissza": odavissza,"jegyid": jegyazonosito};
+        
+        $.ajax({
+            url: "/progmod2/vonatjegyapp/JegyController",
+            type: "POST",
+            data: requestToSend,
+            success: function(response){
+                alert("A jegyvásárlás "+response.valasz+" volt!");
+            }
+        });
+        </script>
+        <br><br>
+        <button style="color: #ffa31a; background-color: #1A1925;" type="submit" id="purchase">Vásárlás</button>
+</form>
+
+</body>
+<style>
+    *{
+    color: #ffa31a;
+   
+  
+    }
+button{
+    color: #1A1925;
+
+}
+input, select{
+    background-color: #1A1925;
+}
+</style>
+</html>
+

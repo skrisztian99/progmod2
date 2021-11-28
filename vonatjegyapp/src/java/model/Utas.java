@@ -12,6 +12,8 @@ import javax.persistence.Basic;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.EntityManager;
+import javax.persistence.EntityManagerFactory;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -21,6 +23,7 @@ import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
+import javax.persistence.Persistence;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
@@ -48,8 +51,12 @@ import javax.xml.bind.annotation.XmlTransient;
     , @NamedQuery(name = "Utas.findByVaros", query = "SELECT u FROM Utas u WHERE u.varos = :varos")
     , @NamedQuery(name = "Utas.findByUtca", query = "SELECT u FROM Utas u WHERE u.utca = :utca")
     , @NamedQuery(name = "Utas.findByHazszam", query = "SELECT u FROM Utas u WHERE u.hazszam = :hazszam")
-    , @NamedQuery(name = "Utas.findByJelszo", query = "SELECT u FROM Utas u WHERE u.jelszo = :jelszo")})
-public class Utas implements Serializable {
+    , @NamedQuery(name = "Utas.findByJelszo", query = "SELECT u FROM Utas u WHERE u.jelszo = :jelszo")
+    , @NamedQuery(name = "Utas.checkLogin", query = "SELECT u FROM Utas u WHERE u.email = :email AND u.jelszo = :jelszo")})
+public class Utas implements Serializable, Dao{
+
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "utas")
+    private List<UtasPreferencia> utasPreferenciaList;
 
     private static final long serialVersionUID = 1L;
     @Id
@@ -271,6 +278,65 @@ public class Utas implements Serializable {
     @Override
     public String toString() {
         return "model.Utas[ idUtas=" + idUtas + " ]";
+    }
+
+    @XmlTransient
+    public List<UtasPreferencia> getUtasPreferenciaList() {
+        return utasPreferenciaList;
+    }
+
+    public void setUtasPreferenciaList(List<UtasPreferencia> utasPreferenciaList) {
+        this.utasPreferenciaList = utasPreferenciaList;
+    }
+    
+    
+    private EntityManagerFactory emf = Persistence.createEntityManagerFactory("vonatjegyappPU");
+    public EntityManager getEntityManager() {
+        return emf.createEntityManager();
+    }
+    private EntityManager entityManager = getEntityManager();
+    
+    @Override
+    public List<Utas> getAll(){
+        return entityManager.createNamedQuery("Utas.findAll").getResultList();
+    }
+    @Override
+    public Utas getById(Integer id){
+        return entityManager.find(Utas.class, id);
+    }
+    @Override
+    public Utas getByString(String email){
+        return (Utas) entityManager.createNamedQuery("Utas.findByEmail").setParameter("email", email).getSingleResult();
+    }
+    
+    public static void save(Utas utas){
+        EntityManagerFactory emf = Persistence.createEntityManagerFactory("vonatjegyappPU");
+        EntityManager em = emf.createEntityManager();
+        em.getTransaction().begin();
+        em.persist(utas);
+        Kedvezmeny KEDVEZMENYidKedvezmeny = utas.getKEDVEZMENYidKedvezmeny();
+        if (KEDVEZMENYidKedvezmeny != null) {
+            KEDVEZMENYidKedvezmeny.getUtasList().add(utas);
+            KEDVEZMENYidKedvezmeny = em.merge(KEDVEZMENYidKedvezmeny);
+        }
+        for (UtasPreferencia utasPreferenciaListUtasPreferencia : utas.getUtasPreferenciaList()) {
+            Utas oldUtasOfUtasPreferenciaListUtasPreferencia = utasPreferenciaListUtasPreferencia.getUtas();
+            utasPreferenciaListUtasPreferencia.setUtas(utas);
+            utasPreferenciaListUtasPreferencia = em.merge(utasPreferenciaListUtasPreferencia);
+            if (oldUtasOfUtasPreferenciaListUtasPreferencia != null) {
+                oldUtasOfUtasPreferenciaListUtasPreferencia.getUtasPreferenciaList().remove(utasPreferenciaListUtasPreferencia);
+                oldUtasOfUtasPreferenciaListUtasPreferencia = em.merge(oldUtasOfUtasPreferenciaListUtasPreferencia);
+            }
+        }
+        em.getTransaction().commit();
+        em.close();
+    }
+    
+    public static Utas login(String email){
+        EntityManagerFactory emf = Persistence.createEntityManagerFactory("vonatjegyappPU");
+        EntityManager em = emf.createEntityManager();
+        Utas u = (Utas) em.createNamedQuery("Utas.findByEmail").setParameter("email", email).getResultList().get(0);
+        return u;
     }
     
 }
