@@ -1,0 +1,58 @@
+<html>
+    <head>
+        <meta charset="UTF-8">
+        <img class="logo" src="progmod.jpg" alt="Logó">
+        <img class="vonatgif" src="login.gif" alt="Vonat gif">
+        <title>Terminus - Könnyen, gyorsan</title>
+        <link rel="stylesheet" href="css/bootstrap.min.css">
+        <link rel="stylesheet" href="login.css">
+        <!-- jQuery library -->
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+        <!-- Latest compiled JavaScript -->
+        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script> 
+    
+        <script>
+            function loginUtas(){
+                var uemail = document.getElementById("email").value;
+                var passid = document.getElementById("password").value;
+                
+                var requestToSend = {"task": "loginUtas", "email": uemail, "password": passid};
+                
+                $.ajax({
+                    url: "/progmod2/vonatjegyapp/UtasController",
+                    type: "POST",
+                    data: requestToSend,
+                    success: function(response){
+                        alert("A bejelentkezés "+ response.valasz +" volt.");
+                        window.location.replace("vonatmain.html");
+                    },
+            
+                    error: function(){
+                        alert("Hiba történt! az adatok feltöltése közben!");
+                    }
+                });
+            }
+        </script>
+    
+    </head>
+    
+    <body>
+        <h2>Írja be az email címét és jelszavát!</h2>
+        <div class="container">
+            <form method="post" class="form-signin" onsubmit="loginUtas()">
+                <h4 class="form-signin-heading"></h4>
+                <input type="text" class="form-control" id="email" name="email" placeholder="Az ön email címe" required autofocus>
+                <input type="password" class="form-control" id="password" name="password" placeholder="Az ön jelszava" required>
+                <button class="btn btn-lg btn primary btn-block" type="submit" name="login">Bejelentkezés</button>
+                <p>Még nem regisztrált?
+                    <a href="register.html">Kattintson ide!</a>
+                </p>
+            </form>
+        </div>
+    </body>
+    
+    <footer>
+    
+    </footer>
+    
+    </html>
