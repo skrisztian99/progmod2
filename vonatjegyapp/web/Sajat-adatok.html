@@ -1,0 +1,239 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Terminus - Könnyen, gyorsan</title>
+    <link rel="stylesheet" href="css/bootstrap.min.css">
+    <h2>Regisztráljon, és kezdje meg az utazását már MA!</h2>
+    <link rel="stylesheet" href="main.css">
+    <!-- jQuery library -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <!-- Latest compiled JavaScript -->
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script> 
+ 
+    <script>
+        function ValidateEmail(uemail)
+        {
+          var mailformat = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;  
+          if(uemail.value.match(mailformat)){
+              return true
+          }
+          else
+          {
+              alert("Helytelen email címet adott meg!");
+              uemail.focus();
+              return false;
+          }
+        }
+        function passid_validation(passid,mx,my)
+        {
+            var passid_len = passid.value.length;
+            if(passid_len === 0 ){
+                alert("A jelszó nem lehet üres!");
+                passid.focus();
+                return false;
+            }
+            else if(passid_len >= my || passid_len < mx){
+                alert("A jelszónak legalább"+mx+" hosszúnak kell lennie");
+                passid.focus();
+                return false;
+            }
+            return true;
+        }
+        function passid_match(pass1, pass2){
+            if(pass1 !== pass2){
+                alert("A két jelszó nem egyezik meg!");
+                return false;
+            }
+            return true;
+        }
+        function onlyNumbers(uszam){
+            var numbers = /^[0-9]*$/;
+            if(uszam.value.match(numbers)){
+                return true;
+            }
+            else{
+                alert("Csakis telefonszámot írjon be!");
+                uszam.focus();
+                return false;
+            }
+        }
+        function ZIPValidate(uirsz){
+            var numbers = /^[0-9]*$/;
+            var length = 4;
+            if(uirsz.value.match(numbers) && uirsz.value.length === length){
+                return true;
+            }
+            else{
+                alert("Helytelen irányítószámot adott meg!");
+                uszam.focus();
+                return false;
+            }
+        }
+        function NameValidation(uvezetek, ukereszt){
+            var letters = /^[a-zA-Z]+$/;
+            if(uvezetek.value.match(letters) && ukereszt.value.match(letters)){
+                return true;
+            }
+            else
+            {
+                alert("A vezetéknév és keresztnév nem tartalmazhat számokat illetve különleges karaktereket!");
+                uvezetek.focus();
+                return false;
+            }
+        }
+        
+       function formValidation()
+        {
+        var uemail = document.getElementsByClassName("email");
+        var passid_1 = document.getElementsByClassName("pwd1");
+        var passid_2 = document.getElementsByClassName("pwd2");
+        var uvezeteknev = document.getElementsByClassName("vnev");
+        var ukeresztnev = document.getElementsByClassName("knev");
+        var utelefon = document.getElementsByClassName("Telefonszam");
+        var uirsz = document.getElementsByClassName("Iranyitoszam");
+        var uvaros = document.getElementsByClassName("Cim");
+        var uhazszam = document.getElementsByClassName("Hazszam");
+        var ukedvezmeny = document.getElementsByClassName("Kedvezmeny");
+        
+        if(ValidateEmail(uemail)){
+            if(passid_validation(passid_1, 8, 45)){
+                if(passid_match(passid_1, passid_2)){
+                    if(onlyNumbers(utelefon)){
+                            if(ZIPValidate(uirsz)){
+                                if(NameValidation){
+                                var requestToSend = {"task": "editUtas", "email": uemail, "pwd1": passid_1, "pwd2": passid_2, "vnev": uvezeteknev, "knev": ukeresztnev, "Telefonszam": utelefon, "Iranyitoszam": uirsz, "Cim": uvaros, "Hazszam": uhazszam, "Kedvezmeny": ukedvezmeny};
+                                $.ajax({
+                                   url: "/progmod2/vonatjegyapp/UtasController",
+                                   type: "POST",
+                                   data: requestToSend,
+                                   success: function(){
+                                       window.location.replace("vonatmain.html");
+                                   },
+                                           
+                                   error: function(){
+                                       alert("Hiba történt! az adatok feltöltése közben!");
+                                   }
+                                });
+                                                    }
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+        
+    
+    </script>
+    
+</head>
+
+<body>
+
+    <div class="container">
+        <form method="post" onsubmit="formValidation()">
+                            <label for="vnev">Vezetéknév:</label><br>
+                            <input type="text" class="vnev" name="vnev" placeholder="Jean">
+                        <br>
+
+                             <label for="knev">Keresztnév:</label>
+                        <br>
+                             <input type="text" class="knev" name="knev" placeholder="Elsa" >
+                        <br>
+
+                   
+                             <label for="Telefonszam">Telefonszám:</label>
+                        <br>
+                             <input type="tel" class="Telefonszam" name="Telefonszam" placeholder="+36303133333" pattern="[0-9]{3}-[0-9]{2}-[0-9]{3}" required> 
+                        <br>
+                            <label for="Iranyitoszam">Irányítószám:</label>
+                        <br>
+                            <input type="tel" class="Iranyitoszam" name="Iranyitoszam" placeholder="7624">
+                        <br>
+                            <label for="Lakhely">Lakhely:</label>
+                        <br>
+                            <input type="text" class="Lakhely" name="Lakhely" placeholder="Pécs">
+                        <br><br>
+                            <label for="Cim">Közterület jellege:</label>
+                            <input type="text" name="Cim" class="Cim">
+                            <br>
+                            <label for="Hazszam">Házszám:</label>
+                        <br>
+                            <input type="text" class="Hazszam" name="Hazszam" placeholder="69">
+                        <br>
+                        <br>
+                            <label for="Kedvezmeny">Kedvezmény:</label>
+                            <select name="Kedvezmeny" class="Kedvezmeny">
+                              <option value="Kedvezmeny">Diák</option>
+                            </select>
+                        <br>
+
+                        
+        
+        
+        <label for="Email">E-mail cím:</label>
+        <br>
+             <input type="email" class="Email" name="Email" placeholder="hotmale@hotmail.com"> 
+        <br>
+
+        <label for="pwd">Jelszó megadása:</label><br>
+        <input type="password" id="pwd1" name="pwd" placeholder="Valami ütőset!">
+        <br>
+        <label for="pwd">Jelszó ismételt megadása:</label><br>
+        <input type="password" id="pwd2" name="pwd" placeholder="Jegyezz meg!">
+        <br><br>
+        
+       <a href="Preferenciak.html"><button class="ToPrefBtn">Katt ide!</button></a>
+       </form>
+    </div>
+</body>
+
+<footer>
+<style>
+
+     
+ 
+    body{
+        color: #ec8f22;
+    }
+    label, input{
+        border-radius: 15px;
+     
+    }
+    input{
+        background-color: #a7a7a7;
+     
+    }
+    .kedvezmeny, .kozjelleg{
+        border-radius: 12px;
+        background-color: #a7a7a7;
+    }
+
+    .Bevitel{
+        margin: 15px;
+        margin-left: 250px;
+        background-color: #EC8F22;
+
+    }
+    .ToPrefBtn {
+  border: none;
+  color: #1A1925;
+  padding: 12px 24px;
+  border-radius: 8px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 16px;
+  margin: 4px 2px;
+  background-color:#EC8F22;
+
+
+}  
+</style>
+</footer>
+
+</html>
+
+/*
+
+*/
